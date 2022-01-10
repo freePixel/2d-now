@@ -11,31 +11,24 @@ scene_id scene::process(SDL_Renderer* _renderer , SDL_Window* _window)
     this->window = _window;
     this->renderer = _renderer;
 
-    clock = new timer(30,30);
-    
+    clock->newTimeEvent(time_event::logic , 1000.0 / 60.0 , updateLogic());
+    clock->newTimeEvent(time_event::graphics , 1000.0 / 30.0 , updateGraphics());
+
     texture_manager = new textureManager(_renderer);
 
     _camera = new camera(_renderer , texture_manager , _window);
+    
 
     init();
 
     while(isRunning)
     {
-        clock->start_frame();
+        clock->startFrame();
 
-        if(clock->updateLogic())
-        {
-            handleEvents();
-            updateLogic();
-            clock->updateL();
-        }
-        if(clock->updateGraphics())
-        {
-            updateGraphics();
-            clock->updateF();
-        }
+        clock->update_time_events();
+        
+        clock->endFrame();
 
-        clock->end_frame();
         clock->wait();
     }
 

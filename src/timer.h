@@ -7,51 +7,63 @@
 #include <functional>
 
 
+enum time_event
+{
+    logic = 0 ,
+    graphics
+};
 
 
 class timer
 {
     public:
-                timer(double fps,  double  cps);
-                void start_frame();
-                void end_frame();
                 void wait();
-
-                bool updateLogic();
-                bool updateGraphics();
-
-                void updateF();
-                void updateL();
+                void startFrame();
+                void endFrame();
 
                 void newTimeEvent(int id , double duration ,  std::function<void()> function); //create a time event, which executes a given function everytime time elapsed reaches duration in milliseconds
                 void removeTimeEvent(int id);
+                void update_time_events();
 
-
-                double elapsedTime(bool logic); //if true return elalpsed time in logic frame, graphics elapsed time otherwise
 
     private:
-                std::chrono::high_resolution_clock::time_point last_frame;
-                std::chrono::high_resolution_clock::time_point current_frame;
-                void update_time_events(int64_t dt);
                 struct timeEvent;
                 std::map<int , timeEvent> time_events;
 
-                double fps = 10;
-                double cps = 10;
-                double base;
-                int f = 0;
-                int l = 0;
-
-                int64_t ti; 
-                int64_t tf;
-
-                int64_t fixed_wait_ns; //default wait time in nanoseconds (10e9 /min(fps,cps))
+                std::chrono::high_resolution_clock::time_point start_frame;
+                std::chrono::high_resolution_clock::time_point end_frame;
+                
+                double minium_time_event;
 
                 struct timeEvent
                 {
-                double duration;
-                double time_left;
-                std::function<void()> function;
+                    
+                    double duration;
+                    double time_left;
+                    timeEvent(double _duration , std::function<void()> _function)
+                    {
+                        function = _function;
+                        duration = _duration;
+                        time_left = _duration;
+
+                    }
+                    void update()
+                    {
+                        t2 = std::chrono::high_resolution_clock::now();
+                        double dt = (t2 - t1).count() / 100000000.0;
+                        time_left -= dt;
+                        if(time_left < 0.0)
+                        {
+                            time_left = duration;
+                            function();
+                        }
+                        t1 = std::chrono::high_resolution_clock::now();
+                    }
+                    std::function<void()> function;
+
+                    private:
+                        std::chrono::high_resolution_clock::time_point t1;
+                        std::chrono::high_resolution_clock::time_point t2;
                 };
 
         

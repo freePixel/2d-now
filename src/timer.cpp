@@ -2,92 +2,57 @@
 
 void timer::newTimeEvent(int id , double duration , std::function<void()> function)
 {
-    time_events[id] = timeEvent{duration , duration  , function};
+    time_events[id] = timeEvent(duration * 1000000, function);
+    if(duration < minium_time_event)
+    {
+        minium_time_event = duration * 10000000;
+    }
     
 }
 
 void timer::removeTimeEvent(int id)
 {
+    if(time_events[id].duration <= minium_time_event)
+    {
+        double min = time_events[0].duration;
+        for(auto iter : time_events)
+        {
+            if(iter.second.duration < min) min = iter.second.duration;
+        }
+        minium_time_event = min;
+    }
     time_events.erase(id);
 }
 
-timer::timer(double fps , double cps)
+void timer::startFrame()
 {
-    this->fps = fps;
-    this->cps = cps;
-    if(fps < cps){
-        base = fps;
-    }
-    else{
-        base = cps;
-    }
-    fixed_wait_ns = (int64_t)(1000000000.0 / base);
-    
+    start_frame = std::chrono::high_resolution_clock::now();
 }
 
-void timer::updateF(){f++;}
-void timer::updateL(){l++;}
-
-void timer::start_frame()
+void timer::endFrame()
 {
-    current_frame = std::chrono::high_resolution_clock::now();
-
+    end_frame = std::chrono::high_resolution_clock::now();
 }
 
-void timer::end_frame()
-{
-    double dt = (std::chrono::high_resolution_clock::now() - current_frame).count() 1000000.0;
-    update_time_events(dt);
-    last_frame = std::chrono::high_resolution_clock::now();
-}
 
 
 void timer::wait()
 {
-    auto diff = last_frame - current_frame;
-    int64_t dt = diff.count();
-    if(dt > fixed_wait_ns)
+    int64_t diff = (end_frame - start_frame).count();
+    int64_t sleep_time = minium_time_event - (int64_t)diff;
+    if(sleep_time < 0)
     {
-        return; //when fps/cps can't be achieved
+        return;
     }
     else{
-        int64_t wait_time = fixed_wait_ns - diff.count();
-        std::this_thread::sleep_for(std::chrono::nanoseconds(wait_time));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(sleep_time));
     }
 }
 
-void timer::update_time_events(double dt)
+void timer::update_time_events()
 {
     for (auto iter : time_events)
     {
-        iter.second.time_left -= dt_ms;
-        if(iter.second.time_left < 0.0)
-        {
-            iter.second.time_left = iter.second.duration + iter.second.time_left;
-
-            iter.second.function(); //execute function
-        }
-    }
-}
-
-bool timer::updateLogic()
-{
-
-    return true;
-}
-
-bool timer::updateGraphics()
-{
-    return true;
-}
-
-double timer::elapsedTime(bool logic)
-{
-    if(logic)
-    {
-        return 0.0f;
-    }
-    else{
-        return 0.0f;
+        iter.second.update();
     }
 }
