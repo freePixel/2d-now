@@ -13,7 +13,7 @@
 
 enum texture_id
 {
-    none = 0 , t1 , t2 , t3
+    none = 5000 , t1 , t2 , t3
 };
 
 class textureManager
@@ -23,7 +23,6 @@ class textureManager
         textureManager(SDL_Renderer* renderer);
         void add_texture(int id , const char* path);
         void add_text(int id , const char* text , SDL_Color color);
-        
         void remove_texture(int id);
         SDL_Texture* get_texture(int id);
         

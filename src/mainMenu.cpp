@@ -30,7 +30,9 @@ void mainMenu::handleEvents()
             case SDL_KEYDOWN:
             switch(event.key.keysym.sym)
             {
-
+                case SDL_KeyCode::SDLK_w:
+                player->move(p2d<float>(1.0f , 0.3f));
+                break;
             }
 
         }
@@ -41,11 +43,12 @@ void mainMenu::handleEvents()
 
 void mainMenu::updateLogic()
 {
-    
+
 }
 
 void mainMenu::updateGraphics()
 {
+
     SDL_RenderClear(renderer);
     
     _camera->render(player);

@@ -6,13 +6,16 @@ scene::~scene()
 }
 
 
+
 scene_id scene::process(SDL_Renderer* _renderer , SDL_Window* _window)
 {
     this->window = _window;
     this->renderer = _renderer;
 
-    clock->newTimeEvent(time_event::logic , 1000.0 / 60.0 , updateLogic());
-    clock->newTimeEvent(time_event::graphics , 1000.0 / 30.0 , updateGraphics());
+    clock = new timer(60.0 , 60.0);
+    std::function<void()> logic_foo = std::bind(&scene::updateLogic , this);
+    std::function<void()> graphics_foo = std::bind(&scene::updateGraphics , this);
+    std::function<void()> events_foo = std::bind(&scene::handleEvents , this);
 
     texture_manager = new textureManager(_renderer);
 
@@ -23,13 +26,30 @@ scene_id scene::process(SDL_Renderer* _renderer , SDL_Window* _window)
 
     while(isRunning)
     {
-        clock->startFrame();
+       clock->start_frame();
 
-        clock->update_time_events();
-        
-        clock->endFrame();
+        handleEvents();
 
+        if(clock->canTickCps())
+        {
+            clock->cpsTick();
+            updateLogic();
+            clock->process_time_events();
+            clock->update_dt_functions();
+        }
+        if(clock->canTickFps())
+        {
+            clock->fpsTick();
+            updateGraphics();
+        }
+
+        clock->end_frame();
         clock->wait();
+
+
+
+       clock->end_frame();
+       clock->wait();
     }
 
     return quit();

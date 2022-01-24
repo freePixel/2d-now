@@ -1,58 +1,137 @@
 #include "timer.h"
 
-void timer::newTimeEvent(int id , double duration , std::function<void()> function)
+
+
+
+timer::timer(double fps , double cps)
 {
-    time_events[id] = timeEvent(duration * 1000000, function);
+    this->fps = fps;
+    this->cps = cps;
+    fps_cps_ratio = fps / cps;
+    if(fps < cps)
+    {
+        standard_delay = (int64_t)(1000000000.0 / fps);
+    }
+    else{
+        standard_delay = (int64_t)(1000000000.0 / cps);
+    }
+}
+
+void timer::newTimeEvent(int id , double duration , std::function<void()> function) //duration below 1000.0/cps not recommended. It may have an impact on performance.
+{
+
+    timeEvent* time_event = new timeEvent(duration , function);
+    time_events[id] = time_event;
     if(duration < minium_time_event)
     {
-        minium_time_event = duration * 10000000;
+        minium_time_event = duration;
     }
-    
+    else{
+        if(minium_time_event == 0.0) minium_time_event = duration;
+    }
+
+}
+
+
+
+void timer::remove_dt_function(int foo_id)
+{
+    delete dtTime_events[foo_id];
+    dtTime_events.erase(foo_id);
+}
+
+void timer::new_dt_function(int foo_id , std::function<void(double)> foo)
+{
+    dtTimeEvent* event = new dtTimeEvent(foo);
+    dtTime_events[foo_id] = event;
+}
+
+void timer::update_dt_functions()
+{
+    for(auto iter : dtTime_events)
+    {
+        iter.second->update();
+    }
 }
 
 void timer::removeTimeEvent(int id)
 {
-    if(time_events[id].duration <= minium_time_event)
+    //find lowest duration
+    if(time_events[id]->duration <= minium_time_event)
     {
-        double min = time_events[0].duration;
+        double min = time_events[0]->duration;
         for(auto iter : time_events)
         {
-            if(iter.second.duration < min) min = iter.second.duration;
+            if(iter.second->duration < min) min = iter.second->duration;
         }
         minium_time_event = min;
     }
+    //delete object & erase from map
+    delete time_events.at(id);
     time_events.erase(id);
 }
 
-void timer::startFrame()
+void timer::process_time_events()
 {
-    start_frame = std::chrono::high_resolution_clock::now();
+    for(auto iter = time_events.begin() ; iter != time_events.end() ; iter++)
+    {
+        iter->second->update();
+    }
 }
 
-void timer::endFrame()
+void timer::start_frame()
 {
-    end_frame = std::chrono::high_resolution_clock::now();
+    start_f = std::chrono::high_resolution_clock::now();
 }
 
+void timer::fpsTick()
+{
+    fps_tick++;
+}
+void timer::cpsTick()
+{
+    cps_tick++;
+}
 
+bool timer::canTickCps()
+{
+   if(((double)fps_tick / cps_tick) >= fps_cps_ratio) return true;
+    else{
+        return false;
+    }
+}
+
+bool timer::canTickFps()
+{
+    if(((double)cps_tick / fps_tick) >= fps_cps_ratio) return true;
+    else{
+        return false;
+    }
+}
+
+void timer::end_frame()
+{
+    end_f = std::chrono::high_resolution_clock::now();
+}
 
 void timer::wait()
 {
-    int64_t diff = (end_frame - start_frame).count();
-    int64_t sleep_time = minium_time_event - (int64_t)diff;
-    if(sleep_time < 0)
-    {
-        return;
-    }
-    else{
-        std::this_thread::sleep_for(std::chrono::nanoseconds(sleep_time));
-    }
+    auto diff = standard_delay - (end_f - start_f).count();
+    std::this_thread::sleep_for(std::chrono::nanoseconds(diff));
 }
 
-void timer::update_time_events()
+timer::~timer()
 {
-    for (auto iter : time_events)
+    //delete timeEvent / dtTimeEvent map objects
+    for(auto iter : time_events)
     {
-        iter.second.update();
+        delete iter.second;
     }
+    time_events.clear();
+    for(auto iter : dtTime_events)
+    {
+        delete iter.second;
+    }
+    dtTime_events.clear();
 }
+

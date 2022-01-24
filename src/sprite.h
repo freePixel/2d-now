@@ -32,7 +32,7 @@ class sprite : public entity
         clock        -> current scene timer object
         */
          
-        
+        ~sprite();
         
 
         

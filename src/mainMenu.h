@@ -12,6 +12,7 @@ class mainMenu : public scene
         void updateLogic();
         void updateGraphics();
         scene_id quit();
+        
     private:
         entity* player = nullptr;
 };

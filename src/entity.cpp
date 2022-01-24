@@ -7,8 +7,8 @@ entity::~entity()
 
 void entity::move(p2d<float> point)
 {
-    dimension->w += point.x;
-    dimension->h += point.y;
+    dimension->x += point.x;
+    dimension->y += point.y;
 }
 
 void entity::set_position(p2d<float> point)
@@ -57,3 +57,8 @@ texture_id entity::get_texture_id()
 }
 
 int entity::id_counter = 0;
+
+bool entity::is_world_coordinate()
+{
+    return world_coordinate;
+}

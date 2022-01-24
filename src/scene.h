@@ -6,6 +6,7 @@
 #include "textureManager.h"
 #include "camera.h"
 
+
 enum scene_id
 {
     menu = 0 , game , end
@@ -17,7 +18,7 @@ class scene
     public:
     ~scene();
          scene_id process(SDL_Renderer* _renderer, SDL_Window* _window);
-         
+         void update_logic_function();
          virtual void init() = 0;
          virtual void handleEvents() = 0;
          virtual void updateLogic() = 0;
@@ -36,6 +37,8 @@ class scene
 
     textureManager* texture_manager = nullptr;
     camera* _camera = nullptr;
+
+    
 
 };
 
