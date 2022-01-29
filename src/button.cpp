@@ -7,8 +7,9 @@ button::button(std::string text , textureManager* _tManager , hitboxManager* hit
     this->t_manager = _tManager;
     this->hitbox_manager = hitbox_manager;
 
-    t_manager->add_text(entity::id , text.c_str() , SDL_Color{255,255,255});
+    t_manager->add_text(entity::id , text.c_str());
     
-
+    current_texture = entity::id;
+    
     hitbox_manager->new_hitbox(entity::id , this , onclick);
 }

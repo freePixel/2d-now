@@ -4,6 +4,7 @@
 #include "entity.h"
 #include <vector>
 #include "timer.h"
+#include "textureManager.h"
 
 namespace sprite_texture
 {
@@ -22,15 +23,15 @@ enum sprite_speed
 
 
 
-class sprite : public entity
+class sprite
 {
     public:
-        sprite(std::vector<int>& _texture_ids , sprite_speed speed , timer* clock); 
         /*
         _texture_ids -> vector containing a list of texture ids of a given sprite
         sprite_speed -> time needed in ms to update sprite animation
         clock        -> current scene timer object
         */
+        sprite(entity* e , std::vector<int>& _texture_ids , sprite_speed speed , timer* clock); 
          
         ~sprite();
         
@@ -40,6 +41,7 @@ class sprite : public entity
     protected:
 
     private:
+        entity* _entity = nullptr;
         int speed = sprite_speed::normal; //default value
         int size;
         int vec_pos_counter;

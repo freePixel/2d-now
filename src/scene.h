@@ -3,14 +3,23 @@
 #include "timer.h"
 #include <iostream>
 #include "SDL2/SDL.h"
-#include "textureManager.h"
 #include "camera.h"
+#include "textureManager.h"
 
 
 enum scene_id
 {
     menu = 0 , game , end
 };
+
+
+/*
+scene class implements a generic game loop.
+It contains all objects necessary (or unecessary) to run the game.
+
+()
+
+*/
 
 
 class scene
@@ -24,8 +33,12 @@ class scene
          virtual void updateLogic() = 0;
          virtual void updateGraphics() = 0;
          virtual scene_id quit() = 0;
+
         
     protected:
+
+
+
     scene_id next_scene;
     timer* clock = nullptr;
     bool isRunning = true;
@@ -35,8 +48,18 @@ class scene
 
     SDL_Event event;
 
-    textureManager* texture_manager = nullptr;
     camera* _camera = nullptr;
+
+
+    //MANAGERS VARIABLES
+    textureManager* texture_manager = nullptr;
+
+    
+
+    private:
+    
+
+
 
     
 

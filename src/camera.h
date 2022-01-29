@@ -3,7 +3,7 @@
 #include "SDL2/SDL.h"
 #include <utility>
 #include "entity.h"
-
+#include "textureManager.h"
 
 /*
 camera class is responsible for rendering all entity's inside a scene.

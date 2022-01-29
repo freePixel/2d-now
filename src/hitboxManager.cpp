@@ -1,10 +1,15 @@
 #include "hitboxManager.h"
 
+
 void hitboxManager::mouse_click(p2d<float> position)
 {
-    for(auto iter : hitbox_map)
+    for(auto iter : manager::map)
     {
-        if(iter.second->check_collision(position))
+        if(!entity::exists(iter.second->_entity)) //check if entity still exists
+        {
+            remove(iter.first);
+        }
+        else if(iter.second->check_collision(position))
         {
             iter.second->onclick();
 
@@ -15,11 +20,11 @@ void hitboxManager::mouse_click(p2d<float> position)
 
 void hitboxManager::new_hitbox(int id , entity* _entity , std::function<void()> onclick_foo)
 {
-    hitbox_map[id] = new hitbox(_entity , onclick_foo);
+    map[id] = new hitbox(_entity , onclick_foo);
 }
 
-void hitboxManager::remove_hitbox(int id)
+void hitboxManager::remove(int id)
 {
-    delete hitbox_map[id];
-    hitbox_map.erase(id);
+    delete map[id];
+    map.erase(id);
 }

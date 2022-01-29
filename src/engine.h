@@ -5,6 +5,10 @@
 #include "inGame.h"
 #include <stdexcept>
 
+/*
+engine class is able to change between scenes.
+It's the most 'abstract' class in the program.
+*/
 
 
 class engine

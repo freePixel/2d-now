@@ -1,6 +1,8 @@
 #include "entity.h"
 #include <string>
+#include "animation.h"
 #include "hitboxManager.h"
+#include "textureManager.h"
 /*
     button is a rectangle with a text inside
 

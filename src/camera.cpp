@@ -22,7 +22,7 @@ void camera::update_window_size()
 
 void camera::render(entity* _entity)
 {
-    SDL_Texture* t = texture_manager->get_texture(_entity->get_texture_id());
+    SDL_Texture* t = texture_manager->get(_entity->get_texture_id());
     SDL_FRect* r = worldToCameraCoordinate(_entity->get_dimension());
     SDL_RenderCopyF(renderer , t , NULL , _entity->get_dimension());
 }

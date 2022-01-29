@@ -51,7 +51,7 @@ entity::entity()
     id_counter++;
 }
 
-texture_id entity::get_texture_id()
+int entity::get_texture_id()
 {
     return current_texture;
 }
@@ -61,4 +61,22 @@ int entity::id_counter = 0;
 bool entity::is_world_coordinate()
 {
     return world_coordinate;
+}
+
+int entity::get_id()
+{
+    return this->id;
+}
+
+void entity::set_texture(int texture_id)
+{
+    this->current_texture = texture_id;
+}
+
+bool entity::exists(entity* e)
+{
+    if(e == nullptr) return false;
+    else{
+        return true;
+    }
 }

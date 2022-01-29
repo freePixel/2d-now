@@ -1,18 +1,20 @@
 #include "mainMenu.h"
 
+void mainMenu::test_foo()
+{
+    std::cout << "BUTTON PRESSED! IT WORKS!" << "\n";
+}
+
 
 void mainMenu::init()
 {
+    hit_manager = new hitboxManager();
     std::cout << "Entered main Menu" << "\n";
-
-    texture_manager->add_texture(texture_id::t1 , "../resources/textures/t1.png");
-    texture_manager->add_texture(texture_id::t2 , "../resources/textures/t2.png");
-    texture_manager->add_texture(texture_id::t3 , "../resources/textures/t3.png");
+    std::function<void()> foo = std::bind(&mainMenu::test_foo , this);
+    _button = new button(std::string("hello world"), texture_manager , hit_manager , foo);
+    _button->set_position(p2d<float>(200.0f, 200.0f));
+    _button->set_size(p2d<float>(100.0f , 100.0f));
     
-    player = new sprite(sprite_texture::player::sp1 , sprite_speed::normal , clock);
-
-    player->set_position(p2d<float>(20.0f,20.0f));
-    player->set_size(p2d<float>(50.0f,50.0f));
     
 }
 
@@ -31,9 +33,13 @@ void mainMenu::handleEvents()
             switch(event.key.keysym.sym)
             {
                 case SDL_KeyCode::SDLK_w:
-                player->move(p2d<float>(1.0f , 0.3f));
+
                 break;
             }
+            case SDL_MOUSEBUTTONDOWN:
+            int x , y;
+            SDL_GetMouseState(&x , &y);
+            hit_manager->mouse_click(p2d<float>((float)x , (float)y));
 
         }
 
@@ -51,7 +57,7 @@ void mainMenu::updateGraphics()
 
     SDL_RenderClear(renderer);
     
-    _camera->render(player);
+    _camera->render(_button);
 
     SDL_RenderPresent(renderer);
 }

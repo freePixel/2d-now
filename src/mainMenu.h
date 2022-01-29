@@ -2,6 +2,7 @@
 
 #include "scene.h"
 #include "sprite.h"
+#include "button.h"
 
 class mainMenu : public scene
 {
@@ -13,8 +14,10 @@ class mainMenu : public scene
         void updateGraphics();
         scene_id quit();
         
+        void test_foo();
     private:
-        entity* player = nullptr;
+        entity* _button = nullptr;
+        hitboxManager* hit_manager = nullptr;
 };
 
 
