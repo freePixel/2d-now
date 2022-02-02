@@ -13,10 +13,6 @@ scene_id scene::process(SDL_Renderer* _renderer , SDL_Window* _window)
     this->renderer = _renderer;
 
     clock = new timer(60.0 , 60.0);
-    std::function<void()> logic_foo = std::bind(&scene::updateLogic , this);
-    std::function<void()> graphics_foo = std::bind(&scene::updateGraphics , this);
-    std::function<void()> events_foo = std::bind(&scene::handleEvents , this);
-
     texture_manager = new textureManager(_renderer);
 
     _camera = new camera(_renderer , texture_manager , _window);

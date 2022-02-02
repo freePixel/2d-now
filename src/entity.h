@@ -5,6 +5,15 @@
 #include <SDL2/SDL.h>
 #include "textureManager.h"
 
+enum ID_OFFSET
+{
+    SPRITE = 0,
+    ANIMATION = 1,
+    HITBOX = 2
+
+};
+
+
 class entity
 {
     public:

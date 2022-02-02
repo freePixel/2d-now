@@ -11,6 +11,10 @@ struct p2d
     T x;
     T y;
 
+    p2d()
+    {
+        
+    }
     p2d(T x , T y)
     {
         this->x = x;
@@ -38,6 +42,10 @@ struct p2d
     p2d operator*(p2d point)
     {
         return {x * point.x , y * point.y};
+    }
+    p2d operator*(T k)
+    {
+        return {k * this->x , k * this->y};
     }
     void operator*=(p2d point)
     {

@@ -1,50 +1,35 @@
 #pragma once
 
 
+#include <vector>
 #include "entity.h"
 #include "timer.h"
-#include "vector"
-
-
-enum class animation_type
-{
-    linear ,            // y = ax
-    negative_quadratic  // y = -(x-k)^2
-};
-
-struct animation_info
-{
-    /*
-    true -> repeat after animation ends
-    false -> after animation ends, it is destroyed
-    */
-    bool repeat;
-
-    std::vector<SDL_FRect> dest_rect; //store all positions
-    animation_type type; //if repeat is 'true' type function
-    double duration; //duration represents the time taken to execute all animation
-    
-    void update(double dt)
-    {
-        
-    }
-
-    private:
-
-    std::vector<SDL_FRect> dest_rect_dt;
-};
+#include "point.h"
+#include <SDL2/SDL.h>
+/*
+    Class animation is directly associated with an entity
+*/
 
 class animation
 {
     public:
-        animation(entity* ent , timer* _timer);
-
-        void set_animation(animation_type type , double duration);
-        
-        
+        animation(p2d<float> dst_position , entity* e , timer* t ,  double duration);
+        ~animation();
+        void update(double dt);
     private:
+
+        void calculate_derivate();
+
         entity* _entity = nullptr;
-        timer* clock = nullptr;
-        void update();
-    
+        timer* _timer = nullptr;
+        
+        double duration = 0.0;
+
+        bool repeat = false;
+
+        p2d<float> dest_position;
+
+        double progress = 0.0;
+        p2d<float> derivate;
+
 };

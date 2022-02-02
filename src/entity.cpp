@@ -48,7 +48,7 @@ entity::entity()
 {
     dimension = new SDL_FRect{0,0,0,0};
     id = id_counter;
-    id_counter++;
+    id_counter += 100;
 }
 
 int entity::get_texture_id()

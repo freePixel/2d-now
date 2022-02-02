@@ -11,6 +11,7 @@ class button : public entity
 {
     public:
         button(std::string text , textureManager* _tManager , hitboxManager* hitbox_manager , std::function<void()> onclick);
+        ~button();
     private:
     std::string text;
     textureManager* t_manager = nullptr;

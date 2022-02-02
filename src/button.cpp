@@ -13,3 +13,9 @@ button::button(std::string text , textureManager* _tManager , hitboxManager* hit
     
     hitbox_manager->new_hitbox(entity::id , this , onclick);
 }
+
+button::~button()
+{
+    //deassociate from hitbox_manager
+    hitbox_manager->remove(entity::id);
+}
