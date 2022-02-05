@@ -13,6 +13,13 @@ camera::camera(SDL_Renderer* _renderer , textureManager* _texture_manager , SDL_
     update_window_size();
 }
 
+p2d<float> camera::cameraToWorldCoordinate(p2d<float> pos)
+{
+    p2d<float> scale(window_size.x / dimension->w, window_size.y / dimension->h);
+
+    return p2d<float>(dimension->x + pos.x/scale.x , dimension->y + pos.y/scale.y);
+}
+
 void camera::update_window_size()
 {
 
@@ -48,6 +55,8 @@ SDL_FRect* camera::worldToCameraCoordinate(const SDL_FRect* rect) //rect should 
 
     
 }
+
+
 
 bool camera::contains(SDL_FRect* rect)
 {

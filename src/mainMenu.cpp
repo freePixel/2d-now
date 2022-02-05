@@ -41,7 +41,8 @@ void mainMenu::handleEvents()
             case SDL_MOUSEBUTTONDOWN:
             int x , y;
             SDL_GetMouseState(&x , &y);
-            hit_manager->mouse_click(p2d<float>((float)x , (float)y));
+            p2d<float> position((float)x,(float)y);
+            hit_manager->mouse_click(_camera->cameraToWorldCoordinate(position));
 
         }
 

@@ -15,6 +15,7 @@ class camera : public entity
         camera(SDL_Renderer* _renderer , textureManager* _texture_manager , SDL_Window* _window);
         void render(entity* _entity);
         void update_window_size();
+        p2d<float> cameraToWorldCoordinate(p2d<float> pos);
         bool contains(SDL_FRect* rect); //check if a given rect intersects camera
 
     private:
