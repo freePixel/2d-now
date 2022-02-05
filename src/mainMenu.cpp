@@ -9,14 +9,13 @@ void mainMenu::test_foo()
 void mainMenu::init()
 {
     hit_manager = new hitboxManager();
-    
+    texture_manager->add_texture(TEXTURE::BUTTON , "../resources/textures/button.png");
     std::cout << "Entered main Menu" << "\n";
     std::function<void()> foo = std::bind(&mainMenu::test_foo , this);
     _button = new button(std::string("hello world"), texture_manager , hit_manager , foo);
-    _button->set_position(p2d<float>(200.0f, 200.0f));
-    _button->set_size(p2d<float>(100.0f , 100.0f));
+    _button->set_position(p2d<float>(600.0f, 200.0f));
+    _button->set_size(p2d<float>(300.0f , 100.0f));
 
-    anim = new animation(p2d<float>(250.0f,250.0f),_button,scene::clock , 5);
     
     
 }

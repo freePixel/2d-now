@@ -22,23 +22,30 @@ void camera::update_window_size()
 
 void camera::render(entity* _entity)
 {
-    SDL_Texture* t = texture_manager->get(_entity->get_texture_id());
+
+    std::vector<int>& textures = _entity->texSet->get_set();
+
     SDL_FRect* r = worldToCameraCoordinate(_entity->get_dimension());
-    SDL_RenderCopyF(renderer , t , NULL , _entity->get_dimension());
+    for(int i=0;i<textures.size();i++)
+    {
+        SDL_Texture* t = texture_manager->get(textures[i]);
+        SDL_RenderCopyF(renderer , t , NULL , r);
+    }
+    delete r;
 }
 
-SDL_FRect* camera::worldToCameraCoordinate(const SDL_FRect* rect)
+SDL_FRect* camera::worldToCameraCoordinate(const SDL_FRect* rect) //rect should be delected
 {
     //normalize basis
 
-    p2d<float> scale((dimension->w / rect->w) / window_size.x, (dimension->h / rect->h) / window_size.y);
+    p2d<float> scale(dimension->w / rect->w, dimension->h / rect->h);
 
 
     return new SDL_FRect{
-        (rect->x - dimension->x) * scale.x,
-        (rect->y - dimension->y) * scale.y,
-        scale.x,
-        scale.y};
+        rect->x,
+        rect->y,
+        rect->w,
+        rect->h};
 
     
 }

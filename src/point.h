@@ -13,7 +13,8 @@ struct p2d
 
     p2d()
     {
-        
+        x = (T)0;
+        y = (T)0;
     }
     p2d(T x , T y)
     {

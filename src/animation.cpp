@@ -23,11 +23,11 @@ void animation::update(double dt)
 {
 
     
-    if(progress > 100.0)
+    if(_timer->get_dt_elapsed_time(_entity->get_id() + ID_OFFSET::ANIMATION) > duration)
     {
         this->~animation();
     }
-    _entity->move(p2d<float>(1.0f,1.0f));
+    _entity->move(p2d<float>(2.0f,0.0f));
     
     
 }

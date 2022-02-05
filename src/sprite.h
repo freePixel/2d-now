@@ -10,7 +10,7 @@ namespace sprite_texture
 {
     namespace player
     {
-        static std::vector<int> sp1 = {texture_id::t1,texture_id::t2, texture_id::t3};
+        static std::vector<int> sp1 = {TEXTURE::T1,TEXTURE::T2, TEXTURE::T3};
     };
 }
 
@@ -23,6 +23,10 @@ enum sprite_speed
 
 
 
+/*
+sprite is should not be used in objects with multiple textures (textureSet size > 1)
+*/
+
 class sprite
 {
     public:
@@ -31,7 +35,7 @@ class sprite
         sprite_speed -> time needed in ms to update sprite animation
         clock        -> current scene timer object
         */
-        sprite(entity* e , std::vector<int>& _texture_ids , sprite_speed speed , timer* clock); 
+        sprite(entity* e , std::vector<int>& _texture_ids, sprite_speed speed , timer* clock); 
          
         ~sprite();
         
@@ -46,7 +50,7 @@ class sprite
         int size;
         int vec_pos_counter;
         timer* clock = nullptr;
-        std::vector<int>* texture_ids;
+        std::vector<int>& texture_ids;
 
         void update(); //next-texture (updated with timer)
         

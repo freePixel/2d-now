@@ -49,12 +49,10 @@ entity::entity()
     dimension = new SDL_FRect{0,0,0,0};
     id = id_counter;
     id_counter += 100;
+    texSet = new textureSet();
 }
 
-int entity::get_texture_id()
-{
-    return current_texture;
-}
+
 
 int entity::id_counter = 0;
 
@@ -68,10 +66,6 @@ int entity::get_id()
     return this->id;
 }
 
-void entity::set_texture(int texture_id)
-{
-    this->current_texture = texture_id;
-}
 
 bool entity::exists(entity* e)
 {

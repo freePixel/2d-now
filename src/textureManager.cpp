@@ -1,5 +1,8 @@
 #include "textureManager.h"
 
+
+
+
 textureManager::textureManager(SDL_Renderer* renderer)
 {
     this->renderer = renderer;
@@ -10,9 +13,11 @@ textureManager::textureManager(SDL_Renderer* renderer)
     {
         throw std::runtime_error(TTF_GetError());
     }
-    add_texture(texture_id::none , "../resources/textures/undefined.png");
+    add_texture(TEXTURE::NONE , "../resources/textures/undefined.png");
 
 }
+
+
 
 void textureManager::add_text(int id , const char* text)
 {

@@ -29,6 +29,7 @@ class manager
                 return map[id];
             }
         }
+        
 
     protected:
         virtual void remove(int id) = 0;

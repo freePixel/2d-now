@@ -6,8 +6,25 @@
 #include "timer.h"
 #include "point.h"
 #include <SDL2/SDL.h>
+
+
+struct trajectory
+{
+    enum class type
+    {
+        linear , quadratic
+    };
+    std::vector<p2d<float>> path;
+
+    void generate(trajectory::type _type)
+    {
+
+    }
+};
+
+
 /*
-    Class animation is directly associated with an entity
+    Class animation should be directly associated with an entity
 */
 
 class animation

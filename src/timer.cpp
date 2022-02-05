@@ -135,3 +135,9 @@ timer::~timer()
     dtTime_events.clear();
 }
 
+//return the total elapsed time of a dtTimeEvent in ms
+double timer::get_dt_elapsed_time(int foo_id)
+{
+    return dtTime_events[foo_id]->elapsedTime;
+}
+

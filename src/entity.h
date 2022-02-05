@@ -28,15 +28,16 @@ class entity
         p2d<float> get_size();
         const SDL_FRect* get_dimension();
 
-        int get_texture_id();
 
         entity();
         ~entity();
-
+        
         bool static exists(entity* e);
 
+        textureSet* texSet = nullptr;
+
     protected:
-        int current_texture = texture_id::none;
+        
         SDL_FRect* dimension = nullptr;
         bool world_coordinate = true;       /*when 'true', entity coordinate must be interpreted such that it is contained in the world
                                             when 'false' entity coordinate must be absolute in screen coordinate (used in objects stuck in the camera)*/

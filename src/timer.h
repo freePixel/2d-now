@@ -18,7 +18,7 @@ enum time_event
 };
 
 /*
-dtTimeEvent should be used when dt is undefined, such as animation class movements.
+dtTimeEvent should be used when dt is undefined and should be called every frame, such as animation class movements.
 */
 
 struct dtTimeEvent
@@ -32,22 +32,25 @@ struct dtTimeEvent
     void update()
     {
         auto dt = (std::chrono::high_resolution_clock::now() - t).count() / 1000000.0;
-
+        elapsedTime += dt;
         function(dt);
 
         t = std::chrono::high_resolution_clock::now();
     }
 
-
+    double elapsedTime = 0.0;
+    
     private:
         std::chrono::high_resolution_clock::time_point t;
         std::function<void(double)> function;
+        
 
 };
 
 /*
 
-timeEvent 
+timeEvent is called every x ms.
+Uses:   sprites
 
 */
 
@@ -100,6 +103,8 @@ class timer
                 void new_dt_function(int foo_id , std::function<void(double)> foo);
                 void remove_dt_function(int foo_id);
                 void update_dt_functions();
+                double get_dt_elapsed_time(int foo_id);
+
 
 
                 void start_frame();

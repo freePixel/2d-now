@@ -19,7 +19,6 @@ class mainMenu : public scene
     private:
         entity* _button = nullptr;
         hitboxManager* hit_manager = nullptr;
-        animation* anim = nullptr;
 };
 
 
