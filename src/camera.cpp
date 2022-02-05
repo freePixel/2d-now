@@ -5,18 +5,19 @@ camera::camera(SDL_Renderer* _renderer , textureManager* _texture_manager , SDL_
     
     this->renderer = _renderer;
     this->texture_manager = _texture_manager;
-    this->window = window;
+    this->window = _window;
 
     entity::set_position(p2d<float>(0.0f,0.0f));
-    entity::set_size(p2d<float>(500.0f,500.0f));
+    entity::set_size(p2d<float>(640.0f,360.0f));
 
     update_window_size();
 }
 
 void camera::update_window_size()
 {
-    int x , y;
-    SDL_GetWindowSize(window , &x , &y);
+
+    int x = SDL_GetWindowSurface(window)->w;
+    int y = SDL_GetWindowSurface(window)->h;
     window_size = p2d<float>((float)x , (float)y);
 }
 
@@ -36,16 +37,14 @@ void camera::render(entity* _entity)
 
 SDL_FRect* camera::worldToCameraCoordinate(const SDL_FRect* rect) //rect should be delected
 {
-    //normalize basis
 
-    p2d<float> scale(dimension->w / rect->w, dimension->h / rect->h);
-
+    p2d<float> scale(window_size.x / dimension->w, window_size.y / dimension->h);
 
     return new SDL_FRect{
-        rect->x,
-        rect->y,
-        rect->w,
-        rect->h};
+        (rect->x - dimension->x) * scale.x,
+        (rect->y - dimension->y) * scale.y,
+        rect->w * scale.x,
+        rect->h * scale.y};
 
     
 }

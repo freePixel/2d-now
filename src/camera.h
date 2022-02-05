@@ -21,7 +21,8 @@ class camera : public entity
 
 
 
-        p2d<float> window_size = p2d<float>(1200 , 1200); //default value
+        p2d<float> window_size = p2d<float>(1280 , 720); //default value
+        
         SDL_Window* window = nullptr;
         SDL_Renderer* renderer = nullptr;
         textureManager* texture_manager = nullptr;

@@ -13,7 +13,7 @@ void mainMenu::init()
     std::cout << "Entered main Menu" << "\n";
     std::function<void()> foo = std::bind(&mainMenu::test_foo , this);
     _button = new button(std::string("hello world"), texture_manager , hit_manager , foo);
-    _button->set_position(p2d<float>(600.0f, 200.0f));
+    _button->set_position(p2d<float>(0.0f, 200.0f));
     _button->set_size(p2d<float>(300.0f , 100.0f));
 
     
