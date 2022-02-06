@@ -15,9 +15,8 @@ class mainMenu : public scene
         void updateGraphics();
         scene_id quit();
         
-        void test_foo();
     private:
-        entity* _button = nullptr;
+        std::vector<entity*> buttons;
         hitboxManager* hit_manager = nullptr;
 };
 

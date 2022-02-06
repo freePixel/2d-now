@@ -34,7 +34,9 @@ void inGame::updateLogic()
 
 void inGame::updateGraphics()
 {
-    
+    SDL_RenderClear(renderer);
+
+    SDL_RenderPresent(renderer);
 }
 
 scene_id inGame::quit()

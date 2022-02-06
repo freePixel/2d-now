@@ -1,20 +1,51 @@
 #include "mainMenu.h"
 
-void mainMenu::test_foo()
-{
-    std::cout << "BUTTON PRESSED! IT WORKS!" << "\n";
-}
 
 
 void mainMenu::init()
 {
+
+    _camera->set_position(p2d<float>(0,0));
+    _camera->set_size(p2d<float>(1280.0f , 720.0f));
+
+
     hit_manager = new hitboxManager();
     texture_manager->add_texture(TEXTURE::BUTTON , "../resources/textures/button.png");
     std::cout << "Entered main Menu" << "\n";
-    std::function<void()> foo = std::bind(&mainMenu::test_foo , this);
-    _button = new button(std::string("hello world"), texture_manager , hit_manager , foo);
-    _button->set_position(p2d<float>(0.0f, 200.0f));
-    _button->set_size(p2d<float>(300.0f , 100.0f));
+    
+
+
+    //initialize buttons
+    entity *b1 = new button(std::string("Play"), texture_manager , hit_manager ,
+    [this](){
+        next_scene = scene_id::game;
+        isRunning = false;}
+    
+    );
+    b1->set_position(p2d<float>(200.0f, 100.0f));
+    b1->set_size(p2d<float>(300.0f , 120.0f));
+
+    entity *b2 = new button(std::string("Credits"), texture_manager , hit_manager ,
+
+    [](){
+        std::cout << "CREDITS NOT ADDED YET";
+        }
+    );
+    b2->set_position(p2d<float>(200.0f, 250.0f));
+    b2->set_size(p2d<float>(300.0f , 120.0f));
+
+    entity *b3 = new button(std::string("Quit"), texture_manager , hit_manager , 
+    //(pass lambda function)
+    [this](){
+        next_scene = scene_id::end;
+        isRunning = false;
+    }        
+    
+    );
+    b3->set_position(p2d<float>(200.0f, 400.0f));
+    b3->set_size(p2d<float>(300.0f , 120.0f));
+
+    buttons = {b1  , b2 , b3};
 
     
     
@@ -60,7 +91,10 @@ void mainMenu::updateGraphics()
 
     SDL_RenderClear(renderer);
     
-    _camera->render(_button);
+    for(int i=0;i<buttons.size();i++)
+    {
+        _camera->render(buttons[i]);
+    }
 
     SDL_RenderPresent(renderer);
 }

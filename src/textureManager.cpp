@@ -8,7 +8,7 @@ textureManager::textureManager(SDL_Renderer* renderer)
     this->renderer = renderer;
     TTF_Init();
     IMG_Init(IMG_INIT_PNG);
-    font = TTF_OpenFont("../resources/fonts/gothic.ttf" , 20);
+    font = TTF_OpenFont("../resources/fonts/gothic.ttf" , 50);
     if(font == nullptr)
     {
         throw std::runtime_error(TTF_GetError());
