@@ -10,11 +10,14 @@ timer::timer(double fps , double cps)
     fps_cps_ratio = fps / cps;
     if(fps < cps)
     {
-        standard_delay = (int64_t)(1000000000.0 / fps);
-    }
-    else{
         standard_delay = (int64_t)(1000000000.0 / cps);
     }
+    else{
+        standard_delay = (int64_t)(1000000000.0 / fps);
+    }
+
+    fps_tick = (int)fps;
+    cps_tick = (int)cps;
 }
 
 void timer::newTimeEvent(int id , double duration , std::function<void()> function) //duration below 1000.0/cps not recommended. It may have an impact on performance.
@@ -52,6 +55,11 @@ void timer::update_dt_functions()
     {
         iter.second->update();
     }
+}
+
+void timer::reset_dt_elaped_time(int foo_id)
+{
+    dtTime_events[foo_id]->elapsedTime = 0.0;
 }
 
 void timer::removeTimeEvent(int id)
@@ -93,9 +101,9 @@ void timer::cpsTick()
     cps_tick++;
 }
 
-bool timer::canTickCps()
+bool timer::canTickCps() //fps / cps
 {
-   if(((double)fps_tick / cps_tick) >= fps_cps_ratio) return true;
+   if(((double)fps_tick / cps_tick) > fps_cps_ratio) return true;
     else{
         return false;
     }
@@ -103,7 +111,7 @@ bool timer::canTickCps()
 
 bool timer::canTickFps()
 {
-    if(((double)cps_tick / fps_tick) >= fps_cps_ratio) return true;
+    if(((double)fps_tick / cps_tick) <= fps_cps_ratio) return true;
     else{
         return false;
     }
@@ -114,10 +122,34 @@ void timer::end_frame()
     end_f = std::chrono::high_resolution_clock::now();
 }
 
+double timer::get_fps()
+{
+    //calculate fps
+    double t = 0.0;
+    for(int i=0;i<last_frames.size();i++)
+    {
+        t += last_frames[i];
+    }
+    return 1 / (t / last_frames.size());
+}
+
 void timer::wait()
 {
     auto diff = standard_delay - (end_f - start_f).count();
-    std::this_thread::sleep_for(std::chrono::nanoseconds(diff));
+    
+    if(diff > 0)
+    {
+        std::this_thread::sleep_for(std::chrono::nanoseconds(diff));
+        last_frames.push_back(standard_delay / 1000000000.0);
+        
+    }
+    else{
+        last_frames.push_back((end_f - start_f).count() / 1000000000.0);
+    }
+
+    if(last_frames.size() > 10) last_frames.erase(last_frames.begin());
+
+
 }
 
 timer::~timer()

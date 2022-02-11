@@ -5,7 +5,7 @@
 #include "SDL2/SDL.h"
 #include "camera.h"
 #include "textureManager.h"
-
+#include <string.h>
 
 enum scene_id
 {
@@ -37,7 +37,7 @@ class scene
         
     protected:
 
-
+        void show_screen_info();
 
     scene_id next_scene;
     timer* clock = nullptr;

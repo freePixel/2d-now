@@ -1,41 +1,79 @@
 #include "animation.h"
 
 
-animation::animation(p2d<float> dst_position , entity* e , timer* t ,  double duration)
+animation::animation(entity* e , timer* t , animationInfo anim_info)
 {
+    //assign variables
     this->_entity = e;
     this->_timer = t;
-    this->repeat = repeat;
-    this->dest_position = dst_position;
+    this->info = anim_info;
+    
+    //asssign update function
     std::function<void(double)> foo = std::bind(&animation::update , this , std::placeholders::_1); //placeholder is used to avoid passing double parameter now (it is known only when function is called)
     _timer->new_dt_function(_entity->get_id() + ID_OFFSET::ANIMATION, foo );
 
-    this->duration = duration;
+    
+
+
 }
 
 
 animation::~animation()
 {
     _timer->remove_dt_function(_entity->get_id() + ID_OFFSET::ANIMATION);
+
 }
 
 void animation::update(double dt)
 {
-
-    
-    if(_timer->get_dt_elapsed_time(_entity->get_id() + ID_OFFSET::ANIMATION) > duration)
+    p2d<float> next_position;
+    double t = _timer->get_dt_elapsed_time(_entity->get_id() + ID_OFFSET::ANIMATION);
+    int idx = info.vidx;
+    if(t > info.time_vec[idx])
     {
-        this->~animation();
+        _timer->reset_dt_elaped_time(_entity->get_id() + ID_OFFSET::ANIMATION);
+        t = info.time_vec[idx];
+        info.vidx++;
+
+        if(info.vidx >= info.trajectory.size() && info.repeat == false)
+        {
+            this->~animation();
+        }
+        else if(info.vidx >= info.trajectory.size())
+        {
+            info.vidx = 0;
+        }
     }
-    _entity->move(p2d<float>(2.0f,0.0f));
     
-    
+    switch(info.type)
+    {
+        case animationType::linear:
+            next_position = calculate_type_linear(t);
+            break;
+        case animationType::cubic:
+            next_position = calculate_type_cubic(t);
+            break;
+    }
+    _entity->set_position(next_position);
 }
 
-void animation::calculate_derivate()
+p2d<float> animation::calculate_type_linear(double t)
 {
-    p2d<float> origin = _entity->get_position();
-    p2d<float> dest   = dest_position;
+    return p2d<float>(0,0);
+}
 
-    derivate = p2d<float>((dest.x - origin.x) / duration , (dest.y - origin.y) / duration);
+p2d<float> animation::calculate_type_cubic(double t)
+{
+    float x , y;
+    double d = info.duration;
+    float p1x = info.trajectory[info.vidx].x;
+    float p1y = info.trajectory[info.vidx].y;
+    float p2x = info.trajectory[info.vidx + 1].x;
+    float p2y = info.trajectory[info.vidx + 1].y;
+
+
+    x = 2*(p1x-p2x)*t*t*t/(d*d*d)+3*(p2x-p1x)*t*t/(d*d)+p1x;
+    y = 2*(p1y-p2y)*t*t*t/(d*d*d)+3*(p2y-p1y)*t*t/(d*d)+p1y;
+
+    return p2d<float>(x,y);
 }
