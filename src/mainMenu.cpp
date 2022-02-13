@@ -52,7 +52,7 @@ void mainMenu::init()
     info.trajectory.push_back(p2d<float>(800.0f , 100.0f));
     info.trajectory.push_back(p2d<float>(200.0f , 100.0f));
     info.repeat = true;
-    info.type = animationType::cubic;
+    info.type = animationType::linear;
     info.generate_time_vec();
     anim = new animation(b1,clock, info);
     

@@ -59,7 +59,16 @@ void animation::update(double dt)
 
 p2d<float> animation::calculate_type_linear(double t)
 {
-    return p2d<float>(0,0);
+    float x , y;
+    double d = info.duration;
+    float p1x = info.trajectory[info.vidx].x;
+    float p1y = info.trajectory[info.vidx].y;
+    float p2x = info.trajectory[info.vidx + 1].x;
+    float p2y = info.trajectory[info.vidx + 1].y;
+
+    x = t*(p2x-p1x)/d + p1x;
+    y = t*(p2y-p1y)/d + p1y;
+    return p2d<float>(x,y);
 }
 
 p2d<float> animation::calculate_type_cubic(double t)
