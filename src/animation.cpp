@@ -10,7 +10,7 @@ animation::animation(entity* e , timer* t , animationInfo anim_info)
     
     //asssign update function
     std::function<void(double)> foo = std::bind(&animation::update , this , std::placeholders::_1); //placeholder is used to avoid passing double parameter now (it is known only when function is called)
-    _timer->new_dt_function(-3, foo );
+    _timer->new_dt_function(_entity->get_id() + ID_OFFSET::ANIMATION, foo );
 
     
 
@@ -20,19 +20,19 @@ animation::animation(entity* e , timer* t , animationInfo anim_info)
 
 animation::~animation()
 {
-    //_timer->remove_dt_function(_entity->get_id() + ID_OFFSET::ANIMATION);
-    _timer->remove_dt_function(-3);
+    _timer->remove_dt_function(_entity->get_id() + ID_OFFSET::ANIMATION);
+
 
 }
 
 void animation::update(double dt)
 {
     
-    double t = _timer->get_dt_elapsed_time(-3);
+    double t = _timer->get_dt_elapsed_time(_entity->get_id() + ID_OFFSET::ANIMATION);
     int idx = info.vidx;
     if(t > info.time_vec[idx])
     {
-        _timer->reset_dt_elaped_time(-3);
+        _timer->reset_dt_elaped_time(_entity->get_id() + ID_OFFSET::ANIMATION);
         t = info.time_vec[idx];
         _entity->set_position(info.trajectory.at(info.vidx + 1));
         info.vidx++;

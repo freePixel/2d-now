@@ -20,7 +20,7 @@ scene_id scene::process(SDL_Renderer* _renderer , SDL_Window* _window)
     this->window = _window;
     this->renderer = _renderer;
 
-    clock = new timer(30.0 , 30.0);
+    clock = new timer(60.0 , 60.0);
     texture_manager = new textureManager(_renderer);
 
     _camera = new camera(_renderer , texture_manager , _window);
@@ -33,7 +33,7 @@ scene_id scene::process(SDL_Renderer* _renderer , SDL_Window* _window)
     while(isRunning)
     {
        clock->start_frame();
-
+        
         handleEvents();
 
         if(clock->canTickCps())
@@ -53,11 +53,6 @@ scene_id scene::process(SDL_Renderer* _renderer , SDL_Window* _window)
 
         clock->end_frame();
         clock->wait();
-
-
-
-       clock->end_frame();
-       clock->wait();
     }
 
     return quit();

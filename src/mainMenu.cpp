@@ -22,7 +22,7 @@ void mainMenu::init()
         isRunning = false;}
     
     );
-    b1->set_position(p2d<float>(200.0f, 100.0f));
+    b1->set_position(p2d<float>(800.0f, 100.0f));
     b1->set_size(p2d<float>(300.0f , 120.0f));
 
     entity *b2 = new button(std::string("Credits"), texture_manager , hit_manager ,
@@ -31,7 +31,7 @@ void mainMenu::init()
         std::cout << "CREDITS NOT ADDED YET";
         }
     );
-    b2->set_position(p2d<float>(200.0f, 250.0f));
+    b2->set_position(p2d<float>(800.0f, 250.0f));
     b2->set_size(p2d<float>(300.0f , 120.0f));
 
     entity *b3 = new button(std::string("Quit"), texture_manager , hit_manager , 
@@ -42,19 +42,36 @@ void mainMenu::init()
     }        
     
     );
-    b3->set_position(p2d<float>(200.0f, 400.0f));
+    b3->set_position(p2d<float>(800.0f, 400.0f));
     b3->set_size(p2d<float>(300.0f , 120.0f));
 
     buttons = {b1  , b2 , b3};
 
-    animationInfo info;
-    info.duration = 5000;
-    info.trajectory.push_back(p2d<float>(800.0f , 100.0f));
-    info.trajectory.push_back(p2d<float>(200.0f , 100.0f));
-    info.repeat = false;
-    info.type = animationType::cubic;
-    info.generate_time_vec();
-    anim = new animation(b1,clock, info);
+    animationInfo info1 , info2 , info3;
+    info1.duration = 3500;
+    info1.trajectory.push_back(b1->get_position());
+    info1.trajectory.push_back(b1->get_position() - p2d<float>(600.0f , 0.0f));
+    info1.repeat = false;
+    info1.type = animationType::cubic;
+    info1.generate_time_vec();
+
+    info2.duration = 3000;
+    info2.trajectory.push_back(b2->get_position());
+    info2.trajectory.push_back(b2->get_position() - p2d<float>(600.0f , 0.0f));
+    info2.repeat = false;
+    info2.type = animationType::cubic;
+    info2.generate_time_vec();
+
+    info3.duration = 2500;
+    info3.trajectory.push_back(b3->get_position());
+    info3.trajectory.push_back(b3->get_position() - p2d<float>(600.0f , 0.0f));
+    info3.repeat = false;
+    info3.type = animationType::cubic;
+    info3.generate_time_vec();
+    animation* anim1 = new animation(b1,clock, info1);
+    animation* anim2 = new animation(b2,clock, info2);
+    animation* anim3 = new animation(b3,clock, info3);
+    
     
 }
 

@@ -19,7 +19,7 @@ class mainMenu : public scene
         std::vector<entity*> buttons;
         hitboxManager* hit_manager = nullptr;
 
-        animation* anim = nullptr;
+
 };
 
 

@@ -5,15 +5,16 @@
 
 timer::timer(double fps , double cps)
 {
+
     this->fps = fps;
     this->cps = cps;
     fps_cps_ratio = fps / cps;
     if(fps < cps)
     {
-        standard_delay = (int64_t)(1000000000.0 / cps);
+        standard_delay = (1000000.0 / cps);
     }
     else{
-        standard_delay = (int64_t)(1000000000.0 / fps);
+        standard_delay = (1000000.0 / fps);
     }
 
     fps_tick = (int)fps;
@@ -130,21 +131,21 @@ double timer::get_fps()
     {
         t += last_frames[i];
     }
-    return 1 / (t / last_frames.size());
+    return 1000000.0 / (t / last_frames.size());
 }
 
 void timer::wait()
 {
-    auto diff = standard_delay - (end_f - start_f).count();
-    
+    double diff =  standard_delay - std::chrono::duration<double , std::micro>(end_f - start_f).count();
     if(diff > 0)
     {
-        std::this_thread::sleep_for(std::chrono::nanoseconds(diff));
-        last_frames.push_back(standard_delay / 1000000000.0);
+        std::this_thread::sleep_for(std::chrono::microseconds((int64_t)diff));
+
+        last_frames.push_back(standard_delay);
         
     }
     else{
-        last_frames.push_back((end_f - start_f).count() / 1000000000.0);
+        last_frames.push_back((end_f - start_f).count() / 1000.0);
     }
 
     if(last_frames.size() > 10) last_frames.erase(last_frames.begin());

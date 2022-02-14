@@ -126,10 +126,10 @@ class timer
                 std::map<int , dtTimeEvent*> dtTime_events;
                 double minium_time_event;
                 
-                std::chrono::high_resolution_clock::time_point start_f;
-                std::chrono::high_resolution_clock::time_point end_f;
+                std::chrono::high_resolution_clock::time_point start_f = std::chrono::high_resolution_clock::now();
+                std::chrono::high_resolution_clock::time_point end_f = std::chrono::high_resolution_clock::now();;
 
-                int64_t standard_delay = 166666667;
+                double standard_delay = 166666667.0;
 
                 double fps = 30 , cps = 60;
                 double fps_cps_ratio = fps / cps;
