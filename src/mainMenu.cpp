@@ -51,8 +51,8 @@ void mainMenu::init()
     info.duration = 5000;
     info.trajectory.push_back(p2d<float>(800.0f , 100.0f));
     info.trajectory.push_back(p2d<float>(200.0f , 100.0f));
-    info.repeat = true;
-    info.type = animationType::linear;
+    info.repeat = false;
+    info.type = animationType::cubic;
     info.generate_time_vec();
     anim = new animation(b1,clock, info);
     

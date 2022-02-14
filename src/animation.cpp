@@ -10,7 +10,7 @@ animation::animation(entity* e , timer* t , animationInfo anim_info)
     
     //asssign update function
     std::function<void(double)> foo = std::bind(&animation::update , this , std::placeholders::_1); //placeholder is used to avoid passing double parameter now (it is known only when function is called)
-    _timer->new_dt_function(_entity->get_id() + ID_OFFSET::ANIMATION, foo );
+    _timer->new_dt_function(-3, foo );
 
     
 
@@ -20,22 +20,24 @@ animation::animation(entity* e , timer* t , animationInfo anim_info)
 
 animation::~animation()
 {
-    _timer->remove_dt_function(_entity->get_id() + ID_OFFSET::ANIMATION);
+    //_timer->remove_dt_function(_entity->get_id() + ID_OFFSET::ANIMATION);
+    _timer->remove_dt_function(-3);
 
 }
 
 void animation::update(double dt)
 {
-    p2d<float> next_position;
-    double t = _timer->get_dt_elapsed_time(_entity->get_id() + ID_OFFSET::ANIMATION);
+    
+    double t = _timer->get_dt_elapsed_time(-3);
     int idx = info.vidx;
     if(t > info.time_vec[idx])
     {
-        _timer->reset_dt_elaped_time(_entity->get_id() + ID_OFFSET::ANIMATION);
+        _timer->reset_dt_elaped_time(-3);
         t = info.time_vec[idx];
+        _entity->set_position(info.trajectory.at(info.vidx + 1));
         info.vidx++;
-
-        if(info.vidx >= info.trajectory.size() && info.repeat == false)
+        
+        if(info.vidx >= info.trajectory.size() - 1 && info.repeat == false)
         {
             this->~animation();
         }
@@ -44,9 +46,10 @@ void animation::update(double dt)
             info.vidx = 0;
         }
     }
-    
-    switch(info.type)
-    {
+    else{
+        p2d<float> next_position;
+        switch(info.type)
+        {
         case animationType::linear:
             next_position = calculate_type_linear(t);
             break;
@@ -55,6 +58,9 @@ void animation::update(double dt)
             break;
     }
     _entity->set_position(next_position);
+    }
+    
+    
 }
 
 p2d<float> animation::calculate_type_linear(double t)
