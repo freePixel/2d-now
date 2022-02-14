@@ -134,7 +134,7 @@ double timer::get_fps()
     return 1000000.0 / (t / last_frames.size());
 }
 
-void timer::wait()
+void timer::wait() /*Due to windows scheduling wait function may not be exact (ADD LATER: IMPROVE PRECISION WITH WINAPI FUNCTIONS) */
 {
     double diff =  standard_delay - std::chrono::duration<double , std::micro>(end_f - start_f).count();
     if(diff > 0)
