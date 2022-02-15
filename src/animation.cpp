@@ -3,6 +3,7 @@
 
 animation::animation(entity* e , timer* t , animationInfo anim_info)
 {
+    anim_info.generate_time_vec();
     //assign variables
     this->_entity = e;
     this->_timer = t;
