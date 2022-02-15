@@ -3,7 +3,8 @@
 
 
 
-textureManager::textureManager(SDL_Renderer* renderer)
+textureManager::textureManager(SDL_Renderer* renderer) : manager(false)
+
 {
     this->renderer = renderer;
     TTF_Init();
@@ -17,6 +18,15 @@ textureManager::textureManager(SDL_Renderer* renderer)
 
 }
 
+void textureManager::force_load(int id)
+{
+    if(CVTMAP::TEXTURE.count((TEXTURES)id) == 0)
+        throw std::runtime_error("Unexpected id");
+
+    else{
+        add_texture((TEXTURES)id);
+    }
+}
 
 
 void textureManager::add_text(int id , const char* text)

@@ -73,6 +73,7 @@ class textureManager : public manager<SDL_Texture*>
 
         void remove(int id) override;
 
+        void force_load(int id) override;
 
     private:
         
