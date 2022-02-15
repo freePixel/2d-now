@@ -8,14 +8,21 @@
 
 #include <map>
 
-enum TEXTURE
+
+
+enum TEXTURES
 {
-    NONE = 0,
-    T1,
-    T2,
-    T3,
-    BUTTON
+    NONE , BACK1 , BACK2 , NONE , BUTTON
 };
+
+struct CVTMAP       //Conversion map
+{
+    static std::map<TEXTURES , std::string> TEXTURE;
+};
+
+std::map<TEXTURES , std::string> CVTMAP::TEXTURE = {
+    {NONE , "../resources/textures/undefined.png"}
+    };
 
 struct textureSet
 {
@@ -61,8 +68,8 @@ class textureManager : public manager<SDL_Texture*>
         textureManager(SDL_Renderer* renderer);
 
         void add_texture(int id , const char* path);
-       
-        void add_text(int id , const char* text);
+        void add_texture(TEXTURES texture); //add texture by TEXTURES enum id
+        void add_text(int  id , const char* text);
 
         void remove(int id) override;
 

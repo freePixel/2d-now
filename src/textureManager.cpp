@@ -13,7 +13,7 @@ textureManager::textureManager(SDL_Renderer* renderer)
     {
         throw std::runtime_error(TTF_GetError());
     }
-    add_texture(TEXTURE::NONE , "../resources/textures/undefined.png");
+    add_texture(TEXTURES::NONE , "../resources/textures/undefined.png");
 
 }
 
@@ -29,6 +29,12 @@ void textureManager::add_texture(int id , const char* path)
 {
     SDL_Texture* t = load_texture(path);
     manager::set(id , t);
+}
+
+void textureManager::add_texture(TEXTURES texture)
+{
+    SDL_Texture* t = load_texture(CVTMAP::TEXTURE[texture].c_str());
+    manager::set((int)texture , t);
 }
 
 
