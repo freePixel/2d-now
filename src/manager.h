@@ -29,6 +29,11 @@ class manager
                 return map[id];
             }
         }
+
+        bool contains(int id)
+        {
+            return map.count(id) != 0;
+        }
         
 
     protected:
