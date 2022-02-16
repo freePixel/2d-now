@@ -12,12 +12,15 @@ button::button(std::string text , textureManager* _tManager , hitboxManager* hit
     textureInfo info1(this->get_size());
     textureInfo info2(this->get_size());
     info1.id = entity::id;
-    
+    info1.size_unit = UNIT::PX;
+    info1.size = t_manager->get_text_size(text);
+    info1.position_unit = UNIT::CENTERED;
+
     info2.id = TEXTURES::BUTTON;
 
 
-    texSet->add_texture(info1,       0);
-    texSet->add_texture(info2      , 1);
+    texSet->add_texture(info1,       1);
+    texSet->add_texture(info2      , 0);
     hitbox_manager->new_hitbox(entity::id , this , onclick);
 }
 
