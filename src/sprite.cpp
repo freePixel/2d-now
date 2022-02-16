@@ -2,7 +2,7 @@
 
 
 
-sprite::sprite(entity* e , std::vector<int>& _texture_ids , sprite_speed speed , timer* clock)
+sprite::sprite(entity* e , std::vector<textureInfo>& _texture_ids , sprite_speed speed , timer* clock)
     : texture_ids(_texture_ids)
 {
 
