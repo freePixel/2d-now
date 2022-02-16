@@ -20,7 +20,9 @@ enum TEXTURES
 enum UNIT
 {
     PX ,    //Pixels 
-    PER     //Percentage
+    PER,     //Percentage
+    INHERT,
+    CENTERED
 };
 
 struct CVTMAP       //Conversion map
@@ -39,7 +41,7 @@ struct textureInfo
     p2d<float> position = {0,0}; //position based on context
     p2d<float> size = {0 , 0}; //size
     UNIT position_unit = UNIT::PX;
-    UNIT size_unit     = UNIT::PX; 
+    UNIT size_unit     = UNIT::INHERT; 
 
 };
 
@@ -93,6 +95,8 @@ class textureManager : public manager<SDL_Texture*>
         void remove(int id) override;
 
         void force_load(int id) override;
+
+        p2d<float> get_text_size(std::string text);
 
     private:
         
