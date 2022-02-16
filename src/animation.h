@@ -39,7 +39,6 @@ enum animationType
 
 struct animationInfo
 {
-    friend animation;
     std::vector<p2d<float>> trajectory;
     
     bool repeat = false;
@@ -47,8 +46,6 @@ struct animationInfo
     double duration = 0.0;
     int vidx = 0; //current vector index
     animationType type = animationType::linear;
-    private:
-    std::vector<double> time_vec;
     void generate_time_vec()
     {
         //find path length
@@ -63,6 +60,8 @@ struct animationInfo
             time_vec.push_back((p2d<float>::distance(trajectory[i],trajectory[i+1]) * duration) / len);
         }
     }
+    std::vector<double> time_vec;
+    private:
 
     
 
@@ -75,6 +74,7 @@ struct animationInfo
 
 class animation
 {
+    friend struct animationInfo;
     public:
         animation(entity* e , timer* t , animationInfo anim_info);
         ~animation();

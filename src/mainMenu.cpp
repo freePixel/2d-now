@@ -10,7 +10,6 @@ void mainMenu::init()
 
 
     hit_manager = new hitboxManager();
-    texture_manager->add_texture(TEXTURE::BUTTON , "../resources/textures/button.png");
     std::cout << "Entered main Menu" << "\n";
     
 
@@ -28,7 +27,7 @@ void mainMenu::init()
     entity *b2 = new button(std::string("Credits"), texture_manager , hit_manager ,
 
     [](){
-        std::cout << "CREDITS NOT ADDED YET";
+        std::cout << "CREDITS NOT ADDED YET" << "\n";
         }
     );
     b2->set_position(p2d<float>(800.0f, 250.0f));
@@ -53,21 +52,18 @@ void mainMenu::init()
     info1.trajectory.push_back(b1->get_position() - p2d<float>(600.0f , 0.0f));
     info1.repeat = false;
     info1.type = animationType::cubic;
-    info1.generate_time_vec();
 
     info2.duration = 3000;
     info2.trajectory.push_back(b2->get_position());
     info2.trajectory.push_back(b2->get_position() - p2d<float>(600.0f , 0.0f));
     info2.repeat = false;
     info2.type = animationType::cubic;
-    info2.generate_time_vec();
 
     info3.duration = 2500;
     info3.trajectory.push_back(b3->get_position());
     info3.trajectory.push_back(b3->get_position() - p2d<float>(600.0f , 0.0f));
     info3.repeat = false;
     info3.type = animationType::cubic;
-    info3.generate_time_vec();
     animation* anim1 = new animation(b1,clock, info1);
     animation* anim2 = new animation(b2,clock, info2);
     animation* anim3 = new animation(b3,clock, info3);
