@@ -11,9 +11,9 @@ class manager
 {
     public:
 
-        manager(bool _forceload) : forceLoad = _forceLoad
+        manager()
         {
-
+            
         }
 
         void set(int id , T obj)
@@ -31,10 +31,11 @@ class manager
                 if(forceLoad == true)
                 {
                     force_load(id);
+                    return NULL;
                 }
                 else{
                     throw std::runtime_error("Id not found!");
-                    return nullptr;
+                    return NULL;
                 }
             }
             else{
@@ -51,7 +52,7 @@ class manager
     protected:
 
         virtual void force_load(int id) = 0; //when forceLoad variable is true, the derived class will try to load object by id (ex: textureManager)
-        const bool forceLoad;
+        bool forceLoad;
         virtual void remove(int id) = 0;
         std::map<int , T> map;
 };
