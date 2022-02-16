@@ -16,10 +16,10 @@ class background : public entity
             info.type = animationType::linear;
             info.duration = 5000.0;
 
-            texSet->add_texture( , 0);
-            if(!manager->contains(TEXTURE::BACK1))
+            
+            if(!manager->contains(TEXTURES::BACK1))
             {
-                manager->add_texture(TEXTURE::BACK1 , )
+                
             }
 
             anim = new animation(this , t , info);
