@@ -9,10 +9,15 @@ button::button(std::string text , textureManager* _tManager , hitboxManager* hit
 
     t_manager->add_text(entity::id , text.c_str());
     
+    textureInfo info1(this->get_size());
+    textureInfo info2(this->get_size());
+    info1.id = entity::id;
     
+    info2.id = TEXTURES::BUTTON;
 
-    texSet->add_texture(TEXTURE::BUTTON, 0);
-    texSet->add_texture(entity::id , 1);
+
+    texSet->add_texture(info1,       0);
+    texSet->add_texture(info2      , 1);
     hitbox_manager->new_hitbox(entity::id , this , onclick);
 }
 
