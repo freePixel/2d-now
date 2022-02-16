@@ -86,14 +86,33 @@ void mainMenu::handleEvents()
             switch(event.key.keysym.sym)
             {
                 case SDL_KeyCode::SDLK_w:
-
+                _camera->move(p2d<float>(0,4.0f));
                 break;
+                case SDL_KeyCode::SDLK_s:
+                _camera->move(p2d<float>(0,-4.0f));
+                break;
+                case SDL_KeyCode::SDLK_a:
+                _camera->move(p2d<float>(4.0f,0));
+                break;
+                case SDL_KeyCode::SDLK_d:
+                _camera->move(p2d<float>(-4.0f,0));
+                break;
+                case SDL_KeyCode::SDLK_r:
+                _camera->scale(p2d<float>(1.05f , 1.05f));
+                break;
+                case SDL_KeyCode::SDLK_t:
+                _camera->scale(p2d<float>(0.95f , 0.95f));
+                break;
+
+                
             }
             case SDL_MOUSEBUTTONDOWN:
-            int x , y;
-            SDL_GetMouseState(&x , &y);
-            p2d<float> position((float)x,(float)y);
-            hit_manager->mouse_click(_camera->cameraToWorldCoordinate(position));
+            if(event.button.button == SDL_BUTTON_LEFT){
+                int x , y;
+                SDL_GetMouseState(&x , &y);
+                p2d<float> position((float)x,(float)y);
+                hit_manager->mouse_click(_camera->cameraToWorldCoordinate(position));
+            }
 
         }
 

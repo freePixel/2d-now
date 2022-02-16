@@ -23,7 +23,7 @@ class camera : public entity
     private:
 
 
-        inline p2d<float> get_position_by_unit(UNIT unit , p2d<float> ctx_size , p2d<float> ctx_pos , p2d<float> target);
+        inline p2d<float> get_position_by_unit(UNIT unit , p2d<float> ctx_size , p2d<float> ctx_pos , p2d<float> calculated_size , p2d<float> target);
         inline p2d<float> get_size_by_unit(UNIT unit , p2d<float> ctx_size  , p2d<float> target);
         p2d<float> window_size = p2d<float>(1280 , 720); //default value
         
