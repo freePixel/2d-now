@@ -108,3 +108,15 @@ textureManager::~textureManager()
 {
     for(const auto &key : map) remove(key.first);
 }
+
+p2d<float> textureManager::get_text_size(std::string text)
+{
+    int* w = new int();
+    int* h = new int();
+    TTF_SizeText(font , text.c_str() , w , h);
+    p2d<float> size =  p2d<float>((float)*w , (float)*h);
+    delete w;
+    delete h;
+    return size;
+
+}
