@@ -56,6 +56,10 @@ struct p2d
         x *= point.x;
         y *= point.y;
     }
+    p2d operator/(T k)
+    {
+        return {this->x / k , this->y / k};
+    }
     p2d operator/(p2d point)
     {
         return {x / point.x , y / point.y};
