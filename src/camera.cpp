@@ -42,11 +42,10 @@ void camera::render(entity* _entity)
         UNIT pos_unit  = info_vec.at(i).position_unit;
         p2d<float> pos_target = info_vec.at(i).position;
         p2d<float> size_target = info_vec.at(i).size;
-
         p2d<float> size = get_size_by_unit(size_unit , src_size , size_target);
-        p2d<float> pos  = get_position_by_unit(pos_unit , src_pos , src_pos , pos_target);
-
-        const SDL_FRect* src_rect = new SDL_FRect{size.x , size.y , pos.x , pos.y};
+        p2d<float> pos  = get_position_by_unit(pos_unit , src_size , src_pos , size , pos_target);
+    
+        const SDL_FRect* src_rect = new SDL_FRect{pos.x , pos.y , size.x , size.y};
         SDL_FRect* dst_rect = worldToCameraCoordinate(src_rect);
 
         SDL_Texture* texture = texture_manager->get(info_vec.at(i).id);
@@ -57,7 +56,7 @@ void camera::render(entity* _entity)
     }
 }
 
-inline p2d<float> camera::get_position_by_unit(UNIT unit , p2d<float> ctx_size , p2d<float> ctx_pos , p2d<float> target)
+inline p2d<float> camera::get_position_by_unit(UNIT unit , p2d<float> ctx_size , p2d<float> ctx_pos ,p2d<float> calculated_size, p2d<float> target)
 {
     switch(unit)
     {
@@ -66,6 +65,10 @@ inline p2d<float> camera::get_position_by_unit(UNIT unit , p2d<float> ctx_size ,
             break;
         case UNIT::PER:
             return ctx_pos + target * ctx_size;
+            break;
+        case UNIT::CENTERED:
+            return ctx_pos + ctx_size / 2.0f - calculated_size / 2.0f;
+            //return ctx_pos + calculated_size / 2.0f;
             break;
         default:
             throw(std::runtime_error("get_position_by_unit() does not recognize unit"));
@@ -82,6 +85,9 @@ inline p2d<float> camera::get_size_by_unit(UNIT unit , p2d<float> ctx_size , p2d
             break;
         case UNIT::PER:
             return target * ctx_size;
+            break;
+        case UNIT::INHERT:
+            return ctx_size;
             break;
         default:
             throw(std::runtime_error("get_size_by_unit() does not recognize unit"));
