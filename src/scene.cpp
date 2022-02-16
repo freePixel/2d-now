@@ -26,7 +26,7 @@ scene_id scene::process(SDL_Renderer* _renderer , SDL_Window* _window)
     _camera = new camera(_renderer , texture_manager , _window);
     
     std::function<void()> f = std::bind(&scene::show_screen_info , this);
-    clock->newTimeEvent(-5 , 1000 , f);
+    clock->newTimeEvent(EVENTS::SHOW_SCREEN_FPS , 1000 , f);
 
     init();
 

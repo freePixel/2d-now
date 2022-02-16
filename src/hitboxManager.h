@@ -32,9 +32,14 @@ struct hitbox
 class hitboxManager : public manager<hitbox*> 
 {
     public:
+    hitboxManager()
+    {
+        forceLoad = false;
+    }
     void new_hitbox(int id , entity* _entity , std::function<void()> onclick_foo);
     void remove(int id) override;
     void mouse_click(p2d<float> position);
+    void force_load(int id) override {};
 
     /*
     Add in future:
