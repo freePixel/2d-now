@@ -8,8 +8,9 @@ scene::~scene()
 void scene::show_screen_info()
 {
     double fps = clock->get_fps();
-
-    std::string str = "UselessEngine             :   FPS:" + std::to_string(fps);
+    const SDL_FRect* dim = _camera->get_dimension();
+    std::string str = "FPS:" + std::to_string(fps) + "| x:" + std::to_string((int)dim->x) + ",y:" +
+    std::to_string((int)dim->y) + ",w:"+std::to_string((int)dim->w)+",h:"+std::to_string((int)dim->h);
     
     SDL_SetWindowTitle(window , str.c_str());
 
