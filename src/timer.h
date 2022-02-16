@@ -11,11 +11,9 @@
 #define UNDEFINED_TIME -1.0 //used in permanent time events
 
 
-enum time_event
+enum EVENTS
 {
-    logic = 0 ,
-    graphics , 
-    handle_event
+    SHOW_SCREEN_FPS = -100
 };
 
 /*
