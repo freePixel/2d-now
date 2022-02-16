@@ -31,16 +31,64 @@ void camera::update_window_size()
 void camera::render(entity* _entity)
 {
 
-    std::vector<int>& textures = _entity->texSet->get_set();
+    std::vector<textureInfo>& info_vec = _entity->texSet->get_set();
 
-    SDL_FRect* r = worldToCameraCoordinate(_entity->get_dimension());
-    for(int i=0;i<textures.size();i++)
+    p2d<float> src_pos = _entity->get_position();
+    p2d<float> src_size = _entity->get_size();
+
+    for(int i=0;i<info_vec.size();i++)
     {
-        SDL_Texture* t = texture_manager->get(textures[i]);
-        SDL_RenderCopyF(renderer , t , NULL , r);
+        UNIT size_unit = info_vec.at(i).size_unit;
+        UNIT pos_unit  = info_vec.at(i).position_unit;
+        p2d<float> pos_target = info_vec.at(i).position;
+        p2d<float> size_target = info_vec.at(i).size;
+
+        p2d<float> size = get_size_by_unit(size_unit , src_size , size_target);
+        p2d<float> pos  = get_position_by_unit(pos_unit , src_pos , src_pos , pos_target);
+
+        const SDL_FRect* src_rect = new SDL_FRect{size.x , size.y , pos.x , pos.y};
+        SDL_FRect* dst_rect = worldToCameraCoordinate(src_rect);
+
+        SDL_Texture* texture = texture_manager->get(info_vec.at(i).id);
+        SDL_RenderCopyF(renderer , texture , NULL , dst_rect);
+
+        delete src_rect;
+        delete dst_rect;
     }
-    delete r;
 }
+
+inline p2d<float> camera::get_position_by_unit(UNIT unit , p2d<float> ctx_size , p2d<float> ctx_pos , p2d<float> target)
+{
+    switch(unit)
+    {
+        case UNIT::PX:
+            return ctx_pos + target;
+            break;
+        case UNIT::PER:
+            return ctx_pos + target * ctx_size;
+            break;
+        default:
+            throw(std::runtime_error("get_position_by_unit() does not recognize unit"));
+            return p2d<float>(0,0);
+    }
+}
+
+inline p2d<float> camera::get_size_by_unit(UNIT unit , p2d<float> ctx_size , p2d<float> target)
+{
+    switch(unit)
+    {
+        case UNIT::PX:
+            return target; 
+            break;
+        case UNIT::PER:
+            return target * ctx_size;
+            break;
+        default:
+            throw(std::runtime_error("get_size_by_unit() does not recognize unit"));
+            return p2d<float>(0,0);
+    }
+}
+
 
 SDL_FRect* camera::worldToCameraCoordinate(const SDL_FRect* rect) //rect should be delected
 {
@@ -52,8 +100,6 @@ SDL_FRect* camera::worldToCameraCoordinate(const SDL_FRect* rect) //rect should 
         (rect->y - dimension->y) * scale.y,
         rect->w * scale.x,
         rect->h * scale.y};
-
-    
 }
 
 
