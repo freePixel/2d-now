@@ -10,7 +10,7 @@ namespace sprite_texture
 {
     namespace player
     {
-        static std::vector<int> sp1 = {TEXTURES::T1,TEXTURES::T2, TEXTURES::T3};
+        static std::vector<int> sp1 = {(int)TEXTURES::T1,(int)TEXTURES::T2, (int)TEXTURES::T3};
     };
 }
 

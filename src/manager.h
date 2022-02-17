@@ -28,13 +28,12 @@ class manager
         {
             if(map.count(id) == 0)
             {
-                if(forceLoad == true)
+                if(force_load(id))
                 {
-                    force_load(id);
-                    return NULL;
+                    return map[id];
                 }
                 else{
-                    throw std::runtime_error("Id not found!");
+                    throw std::runtime_error("Unknown id!: " + std::to_string(id));
                     return NULL;
                 }
             }
@@ -51,7 +50,7 @@ class manager
 
     protected:
 
-        virtual void force_load(int id) = 0; //when forceLoad variable is true, the derived class will try to load object by id (ex: textureManager)
+        virtual bool force_load(int id) = 0; //when forceLoad variable is true, the derived class will try to load object by id (ex: textureManager)
         bool forceLoad;
         virtual void remove(int id) = 0;
         std::map<int , T> map;
