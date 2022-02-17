@@ -1,6 +1,7 @@
 #pragma once
 
 #include "scene.h"
+#include "block.h"
 
 class inGame : public scene
 {
@@ -11,4 +12,7 @@ class inGame : public scene
         void updateGraphics();
         scene_id quit();
     private:
+
+    entity* b1 = nullptr;
+
 };

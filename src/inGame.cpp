@@ -3,6 +3,7 @@
 void inGame::init()
 {
     std::cout << "Entering inGame scene" << "\n";
+    b1 = new  block(BLOCKS::GRASS , p2d<float>(0,0) , texture_manager);
 }
 
 void inGame::handleEvents()
@@ -35,12 +36,13 @@ void inGame::updateLogic()
 void inGame::updateGraphics()
 {
     SDL_RenderClear(renderer);
-
+    _camera->render(b1);
     SDL_RenderPresent(renderer);
 }
 
 scene_id inGame::quit()
 {
     std::cout << "Exiting inGame scene" << "\n";
+    delete b1;
     return scene_id::end;
 }
