@@ -16,7 +16,7 @@ button::button(std::string text , textureManager* _tManager , hitboxManager* hit
     info1.size = t_manager->get_text_size(text);
     info1.position_unit = UNIT::CENTERED;
 
-    info2.id = TEXTURES::BUTTON;
+    info2.id = (int)TEXTURES::BUTTON;
 
 
     texSet->add_texture(info1,       1);

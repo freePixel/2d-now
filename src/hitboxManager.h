@@ -39,7 +39,7 @@ class hitboxManager : public manager<hitbox*>
     void new_hitbox(int id , entity* _entity , std::function<void()> onclick_foo);
     void remove(int id) override;
     void mouse_click(p2d<float> position);
-    void force_load(int id) override {};
+    bool force_load(int id) override {return false;};
 
     /*
     Add in future:

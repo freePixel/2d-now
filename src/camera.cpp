@@ -68,7 +68,6 @@ inline p2d<float> camera::get_position_by_unit(UNIT unit , p2d<float> ctx_size ,
             break;
         case UNIT::CENTERED:
             return ctx_pos + ctx_size / 2.0f - calculated_size / 2.0f;
-            //return ctx_pos + calculated_size / 2.0f;
             break;
         default:
             throw(std::runtime_error("get_position_by_unit() does not recognize unit"));
