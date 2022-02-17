@@ -1,8 +1,10 @@
 #include "textureManager.h"
 
 std::map<TEXTURES , std::string> CVTMAP::TEXTURE = {
-    {NONE , "../resources/textures/undefined.png"} , 
-    {BUTTON , "../resources/textures/button.png"}
+    {TEXTURES::NONE , "../resources/textures/undefined.png"} , 
+    {TEXTURES::BUTTON , "../resources/textures/button.png"} ,
+    {TEXTURES::DIRT , "../resources/textures/dirt.png"} , 
+    {TEXTURES::GRASS , "../resources/textures/grass.png"}
 };
 
 
@@ -17,17 +19,20 @@ textureManager::textureManager(SDL_Renderer* renderer)
     {
         throw std::runtime_error(TTF_GetError());
     }
-    add_texture(TEXTURES::NONE , "../resources/textures/undefined.png");
+    add_texture(TEXTURES::NONE);
 
 }
 
-void textureManager::force_load(int id)
+bool textureManager::force_load(int id)
 {
-    if(CVTMAP::TEXTURE.count((TEXTURES)id) == 0)
-        throw std::runtime_error("Unexpected id " + std::to_string(id));
+    if(CVTMAP::TEXTURE.count((TEXTURES)id) != 0){
+        add_texture((TEXTURES)id);
+        return true;
+    }
 
     else{
-        add_texture((TEXTURES)id);
+        std::cout << "Unknown texture! ID = " << id << "\n";
+        return false;
     }
 }
 

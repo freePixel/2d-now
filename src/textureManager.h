@@ -12,12 +12,14 @@
 
 
 
-enum TEXTURES
+enum class TEXTURES
 {
-    NONE , BACK1 , BACK2 , BUTTON , T1 , T2 , T3
+    NONE = 0, BACK1 , BACK2 , BUTTON , T1 , T2 , T3 , DIRT , GRASS
 };
 
-enum UNIT
+
+
+enum class UNIT
 {
     PX ,    //Pixels 
     PER,     //Percentage
@@ -37,6 +39,7 @@ struct textureInfo
     {
         size = _size;
     }
+    textureInfo(){};
     int id; //texture id
     p2d<float> position = {0,0}; //position based on context
     p2d<float> size = {0 , 0}; //size
@@ -94,7 +97,7 @@ class textureManager : public manager<SDL_Texture*>
 
         void remove(int id) override;
 
-        void force_load(int id) override;
+        bool force_load(int id) override;
 
         p2d<float> get_text_size(std::string text);
 
