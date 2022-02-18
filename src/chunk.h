@@ -12,6 +12,7 @@ class chunk
         chunk(p2d<int> _coordinate);
     
         static std::vector<p2d<int>>& find_contained_chunks(p2d<float> position , p2d<float> size);
+        static p2d<int> find_chunk(p2d<float> position);
     private:
         p2d<int> coordinate;
         std::vector<entity*> objects;

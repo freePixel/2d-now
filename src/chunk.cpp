@@ -5,7 +5,7 @@ chunk::chunk(p2d<int> _coordinate)
             coordinate = _coordinate;
 }
 
-std::vector<p2d<int>>& find_contained_chunks(p2d<float> position , p2d<float> size)
+std::vector<p2d<int>>& chunk::find_contained_chunks(p2d<float> position , p2d<float> size)
 {
     std::vector<p2d<int>>* v1 = new std::vector<p2d<int>>();
     p2d<int> pos = p2d<int>((int)position.x , (int)position.y);
@@ -22,5 +22,10 @@ std::vector<p2d<int>>& find_contained_chunks(p2d<float> position , p2d<float> si
         }
     }
     return *v1;
+}
+
+p2d<int> chunk::find_chunk(p2d<float> position)
+{
+    return p2d<int>((int)position.x / CHUNK_SIZE , (int)position.y / CHUNK_SIZE);
 }
 
