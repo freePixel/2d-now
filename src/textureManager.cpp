@@ -1,4 +1,20 @@
+#include "scene.h"
 #include "textureManager.h"
+
+
+
+textureInfo::textureInfo(p2d<float> _size)
+{
+        size = _size;
+}
+
+textureInfo::textureInfo()
+{
+    
+}
+
+
+
 
 std::map<TEXTURES , std::string> CVTMAP::TEXTURE = {
     {TEXTURES::NONE , "../resources/textures/undefined.png"} , 
@@ -8,19 +24,18 @@ std::map<TEXTURES , std::string> CVTMAP::TEXTURE = {
 };
 
 
-textureManager::textureManager(SDL_Renderer* renderer)
+textureManager::textureManager()
 {
-    manager::forceLoad = true;
-    this->renderer = renderer;
     TTF_Init();
     IMG_Init(IMG_INIT_PNG);
+    manager::forceLoad = true;
     font = TTF_OpenFont("../resources/fonts/gothic.ttf" , 50);
     if(font == nullptr)
     {
         throw std::runtime_error(TTF_GetError());
     }
     add_texture(TEXTURES::NONE);
-
+    
 }
 
 bool textureManager::force_load(int id)
@@ -60,13 +75,16 @@ void textureManager::add_texture(TEXTURES texture)
 SDL_Texture* textureManager::load_texture(const char* path)
 {
     //load texture here
+
     SDL_Surface* surface = IMG_Load(path);
+
     if(surface == nullptr)
     {
         throw std::runtime_error(IMG_GetError());
     }
     else{
-        SDL_Texture* texture = SDL_CreateTextureFromSurface(this->renderer , surface);
+        SDL_Texture* texture = SDL_CreateTextureFromSurface(scene::vars->renderer , surface);
+
         if(texture == nullptr)
         {
             throw std::runtime_error(SDL_GetError());
@@ -90,7 +108,7 @@ SDL_Texture* textureManager::load_text(const char* text)
         throw std::runtime_error(TTF_GetError());
     }
     else{
-        SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+        SDL_Texture* texture = SDL_CreateTextureFromSurface(scene::vars->renderer, surface);
         if(texture == nullptr)
         {
             throw std::runtime_error(SDL_GetError());
@@ -103,7 +121,7 @@ SDL_Texture* textureManager::load_text(const char* text)
     }
 }
 
-void textureManager::remove(int id)
+void textureManager::derived_remove(int id)
 {
     SDL_DestroyTexture(map[id]);
     map.erase(id);

@@ -12,6 +12,7 @@
 
 
 
+
 enum class TEXTURES
 {
     NONE = 0, BACK1 , BACK2 , BUTTON , T1 , T2 , T3 , DIRT , GRASS
@@ -35,11 +36,8 @@ struct CVTMAP       //Conversion map
 struct textureInfo
 {
 
-    textureInfo(p2d<float> _size)
-    {
-        size = _size;
-    }
-    textureInfo(){};
+    textureInfo(p2d<float> _size);
+    textureInfo();
     int id; //texture id
     p2d<float> position = {0,0}; //position based on context
     p2d<float> size = {0 , 0}; //size
@@ -80,35 +78,31 @@ struct textureSet
         {
             set.erase(set.begin() + priority);
         }
-    private:
         std::vector<textureInfo> set;
 };
 
 
-class textureManager : public manager<SDL_Texture*>
+class textureManager : public manager<int , SDL_Texture*>
 {
     public:
         ~textureManager();
-        textureManager(SDL_Renderer* renderer);
+        textureManager();
 
         void add_texture(int id , const char* path);
         void add_texture(TEXTURES texture); //add texture by TEXTURES enum id
         void add_text(int  id , const char* text);
 
-        void remove(int id) override;
+        void derived_remove(int id) override;
 
         bool force_load(int id) override;
-
+        
         p2d<float> get_text_size(std::string text);
 
-    private:
+    protected:
         
-
+        void on_set(int id) override{}
         SDL_Texture* load_texture(const char* path);
         SDL_Texture* load_text(const char* text);
-
-        SDL_Renderer* renderer = nullptr;
-
         TTF_Font* font = nullptr;
 
         
