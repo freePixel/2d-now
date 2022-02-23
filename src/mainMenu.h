@@ -16,8 +16,6 @@ class mainMenu : public scene
         scene_id quit();
         
     private:
-        std::vector<entity*> buttons;
-        hitboxManager* hit_manager = nullptr;
 
 
 };

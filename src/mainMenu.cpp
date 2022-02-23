@@ -4,18 +4,17 @@
 
 void mainMenu::init()
 {
-
-    _camera->set_position(p2d<float>(0,0));
-    _camera->set_size(p2d<float>(1280.0f , 720.0f));
-
-
-    hit_manager = new hitboxManager();
     std::cout << "Entered main Menu" << "\n";
+
+    scene::vars->view->set_position(p2d<float>(0,0));
+    scene::vars->view->set_size(p2d<float>(1280.0f , 720.0f));
+
     
 
 
     //initialize buttons
-    entity *b1 = new button(std::string("Play"), texture_manager , hit_manager ,
+    entity *b1 = new button(std::string("Play"),
+    //(pass lambda function)
     [this](){
         next_scene = scene_id::game;
         isRunning = false;}
@@ -24,8 +23,7 @@ void mainMenu::init()
     b1->set_position(p2d<float>(800.0f, 100.0f));
     b1->set_size(p2d<float>(300.0f , 120.0f));
 
-    entity *b2 = new button(std::string("Credits"), texture_manager , hit_manager ,
-
+    entity *b2 = new button(std::string("Credits"),
     [](){
         std::cout << "CREDITS NOT ADDED YET" << "\n";
         }
@@ -33,18 +31,22 @@ void mainMenu::init()
     b2->set_position(p2d<float>(800.0f, 250.0f));
     b2->set_size(p2d<float>(300.0f , 120.0f));
 
-    entity *b3 = new button(std::string("Quit"), texture_manager , hit_manager , 
-    //(pass lambda function)
+    entity *b3 = new button(std::string("Quit"), 
+    
     [this](){
         next_scene = scene_id::end;
         isRunning = false;
     }        
     
     );
+
     b3->set_position(p2d<float>(800.0f, 400.0f));
     b3->set_size(p2d<float>(300.0f , 120.0f));
 
-    buttons = {b1  , b2 , b3};
+
+    scene::vars->entity_manager->set(100 , b1);
+    scene::vars->entity_manager->set(150 ,b2);
+    scene::vars->entity_manager->set(200 , b3);
 
     animationInfo info1 , info2 , info3;
     info1.duration = 3500;
@@ -64,9 +66,10 @@ void mainMenu::init()
     info3.trajectory.push_back(b3->get_position() - p2d<float>(600.0f , 0.0f));
     info3.repeat = false;
     info3.type = animationType::cubic;
-    animation* anim1 = new animation(b1,clock, info1);
-    animation* anim2 = new animation(b2,clock, info2);
-    animation* anim3 = new animation(b3,clock, info3);
+
+    animation* anim1 = new animation(100, info1);
+    animation* anim2 = new animation(150, info2);
+    animation* anim3 = new animation(200, info3);
     
     
 }
@@ -86,22 +89,22 @@ void mainMenu::handleEvents()
             switch(event.key.keysym.sym)
             {
                 case SDL_KeyCode::SDLK_w:
-                _camera->move(p2d<float>(0,4.0f));
+                scene::vars->view->move(p2d<float>(0,4.0f));
                 break;
                 case SDL_KeyCode::SDLK_s:
-                _camera->move(p2d<float>(0,-4.0f));
+                scene::vars->view->move(p2d<float>(0,-4.0f));
                 break;
                 case SDL_KeyCode::SDLK_a:
-                _camera->move(p2d<float>(4.0f,0));
+                scene::vars->view->move(p2d<float>(4.0f,0));
                 break;
                 case SDL_KeyCode::SDLK_d:
-                _camera->move(p2d<float>(-4.0f,0));
+                scene::vars->view->move(p2d<float>(-4.0f,0));
                 break;
                 case SDL_KeyCode::SDLK_r:
-                _camera->scale(p2d<float>(1.05f , 1.05f));
+                scene::vars->view->scale(p2d<float>(1.05f , 1.05f));
                 break;
                 case SDL_KeyCode::SDLK_t:
-                _camera->scale(p2d<float>(0.95f , 0.95f));
+                scene::vars->view->scale(p2d<float>(0.95f , 0.95f));
                 break;
 
                 
@@ -111,7 +114,7 @@ void mainMenu::handleEvents()
                 int x , y;
                 SDL_GetMouseState(&x , &y);
                 p2d<float> position((float)x,(float)y);
-                hit_manager->mouse_click(_camera->cameraToWorldCoordinate(position));
+                scene::vars->hitbox_manager->mouse_click(scene::vars->view->cameraToWorldCoordinate(position));
             }
 
         }
@@ -128,14 +131,15 @@ void mainMenu::updateLogic()
 void mainMenu::updateGraphics()
 {
 
-    SDL_RenderClear(renderer);
+    SDL_RenderClear(scene::vars->renderer);
     
-    for(int i=0;i<buttons.size();i++)
-    {
-        _camera->render(buttons[i]);
-    }
 
-    SDL_RenderPresent(renderer);
+    scene::vars->view->render(100);
+    scene::vars->view->render(150);
+    scene::vars->view->render(200);
+
+
+    SDL_RenderPresent(scene::vars->renderer);
 }
 
 scene_id mainMenu::quit()
