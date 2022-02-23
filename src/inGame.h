@@ -13,6 +13,6 @@ class inGame : public scene
         scene_id quit();
     private:
 
-    entity* b1 = nullptr;
+    
 
 };
