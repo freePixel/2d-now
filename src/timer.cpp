@@ -1,6 +1,43 @@
 #include "timer.h"
 
+dtTimeEvent::dtTimeEvent(std::function<void(double)> foo)
+{
+    function  =  foo;
+    t = std::chrono::high_resolution_clock::now();
+}
 
+void dtTimeEvent::update()
+{
+    auto dt = (std::chrono::high_resolution_clock::now() - t).count() / 1000000.0;
+    elapsedTime += dt;
+    function(dt);
+
+    t = std::chrono::high_resolution_clock::now();
+}
+
+
+timeEvent::timeEvent(double _duration , std::function<void()> _function)
+{
+    foo = _function;
+    duration = _duration;
+    time_left = _duration;
+    t1 = std::chrono::high_resolution_clock::now();
+}
+
+void timeEvent::update()
+    {
+        
+        double dt = (std::chrono::high_resolution_clock::now() - t1).count() / 1000000.0;
+        t1 = std::chrono::high_resolution_clock::now();
+        time_left -= dt;
+        if(time_left < 0.0){
+            
+            int lost_calls = int(abs(time_left) / duration) + 1;
+            for(int i=0;i<lost_calls;i++) foo();
+            time_left += duration * lost_calls;
+        }
+        
+    }
 
 
 timer::timer(double fps , double cps)

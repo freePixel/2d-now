@@ -23,19 +23,8 @@ dtTimeEvent should be used when dt is undefined and should be called every frame
 struct dtTimeEvent
 {
     public:
-    dtTimeEvent(std::function<void(double)> foo)
-    {
-        function  =  foo;
-        t = std::chrono::high_resolution_clock::now();
-    }
-    void update()
-    {
-        auto dt = (std::chrono::high_resolution_clock::now() - t).count() / 1000000.0;
-        elapsedTime += dt;
-        function(dt);
-
-        t = std::chrono::high_resolution_clock::now();
-    }
+    dtTimeEvent(std::function<void(double)> foo);
+    void update();
 
     double elapsedTime = 0.0;
     
@@ -55,32 +44,12 @@ Uses:   sprites
 
 struct timeEvent
 {
-            timeEvent(double _duration , std::function<void()> _function)
-            {
-                function = _function;
-                duration = _duration;
-                time_left = _duration;
-                t1 = std::chrono::high_resolution_clock::now();
-
-            }
+            timeEvent(double _duration , std::function<void()> _function);
             double duration;
             double time_left;
-            void update()
-            {
-                
-                double dt = (std::chrono::high_resolution_clock::now() - t1).count() / 1000000.0;
-                t1 = std::chrono::high_resolution_clock::now();
-                time_left -= dt;
-                if(time_left < 0.0){
-                    
-                    int lost_calls = int(abs(time_left) / duration) + 1;
-                    for(int i=0;i<lost_calls;i++) function();
-                    time_left += duration * lost_calls;
-                }
-                
-            }
+            void update();
 
-            std::function<void()> function;
+            std::function<void()> foo;
 
             private:
                 std::chrono::high_resolution_clock::time_point t1;
