@@ -4,9 +4,11 @@
 #include <stdexcept>
 #include <SDL2/SDL.h>
 #include <typeinfo>
+#include <iostream>
 
 
-template <class T>
+
+template <typename U , class T>
 class manager
 {
     public:
@@ -16,24 +18,27 @@ class manager
             
         }
 
-        void set(int id , T obj)
+        void set(U id , T obj)
         {
-            if(contains(id)) throw std::runtime_error("Id aldready exists!");
+            if(contains(id))
+             std::cout << id <<  " id aldready exists!" << "\n";
             else{
-            manager::map[id] = obj;
+                manager::map[id] = obj;
+                on_set(id);
             }
         }
 
-        T   get(int id)
+        T   get(U id)
         {
-            if(map.count(id) == 0)
+            if(contains(id) == false)
             {
                 if(force_load(id))
                 {
                     return map[id];
                 }
                 else{
-                    throw std::runtime_error("Unknown id!: " + std::to_string(id));
+                    std::cout << id <<  " id not found!" << "\n";
+                    
                     return NULL;
                 }
             }
@@ -42,18 +47,35 @@ class manager
             }
         }
 
-        bool contains(int id)
+        void transfer(U id1 , U id2)
+        {
+            T obj = get(id1);
+            set(id2 , obj);
+            map.erase(id1);
+        }
+
+        bool contains(U id)
         {
             return map.count(id) != 0;
         }
         
+        void remove(U id)
+        {
+            if(contains(id))
+            {
+                derived_remove(id);
+            }
+            else{
+                std::cout << "Remove failed because the id " << id << " is unknown" << "\n";
+            }
+        }
 
     protected:
-
-        virtual bool force_load(int id) = 0; //when forceLoad variable is true, the derived class will try to load object by id (ex: textureManager)
         bool forceLoad;
-        virtual void remove(int id) = 0;
-        std::map<int , T> map;
+        virtual bool force_load(U id) = 0; //the derived class will try to load object by id (ex: textureManager)
+        virtual void derived_remove(U id) = 0;
+        virtual void on_set(U id) = 0;
+        std::map<U , T> map;
 };
 
 
