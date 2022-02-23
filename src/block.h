@@ -1,8 +1,8 @@
 #pragma once
+#include "entity.h"
 
 #define BLOCK_SIZE 32
 
-#include "entity.h"
 
 enum class BLOCKS
 {
@@ -12,17 +12,16 @@ enum class BLOCKS
 class block : public entity
 {
     public:
-    block(BLOCKS type , p2d<float> position , textureManager* _tManager)
+    block(BLOCKS type , p2d<float> position)
     {
-        tManager = _tManager;
-
         set_size(p2d<float>((float)BLOCK_SIZE , (float)BLOCK_SIZE));
         set_position(position);
-
+        
         textureInfo info = textureInfo();
         info.position_unit = UNIT::PX;
         info.position = p2d<float>(0.0f,0.0f);
         info.size_unit     = UNIT::INHERT;
+    
         
         switch(type)
         {
@@ -37,6 +36,10 @@ class block : public entity
         texSet->add_texture(info , 0);
     }
 
+    void on_id_change(int lastid , int newid) override
+    {
+        
+    }
+
     private:
-        textureManager* tManager = nullptr;
 };
