@@ -1,16 +1,17 @@
+#include "scene.h"
 #include "camera.h"
 
-camera::camera(SDL_Renderer* _renderer , textureManager* _texture_manager , SDL_Window* _window)
+camera::camera()
 {
     
-    this->renderer = _renderer;
-    this->texture_manager = _texture_manager;
-    this->window = _window;
+    
 
     entity::set_position(p2d<float>(0.0f,0.0f));
     entity::set_size(p2d<float>(640.0f,360.0f));
 
     update_window_size();
+
+    chunk::find_contained_chunks(get_position() , get_size() , target_chunks);
 }
 
 p2d<float> camera::cameraToWorldCoordinate(p2d<float> pos)
@@ -23,19 +24,18 @@ p2d<float> camera::cameraToWorldCoordinate(p2d<float> pos)
 void camera::update_window_size()
 {
 
-    int x = SDL_GetWindowSurface(window)->w;
-    int y = SDL_GetWindowSurface(window)->h;
+    int x = SDL_GetWindowSurface(scene::vars->window)->w;
+    int y = SDL_GetWindowSurface(scene::vars->window)->h;
     window_size = p2d<float>((float)x , (float)y);
 }
 
-void camera::render(entity* _entity)
+void camera::render(int _entity_id)
 {
-
-    std::vector<textureInfo>& info_vec = _entity->texSet->get_set();
-
-    p2d<float> src_pos = _entity->get_position();
-    p2d<float> src_size = _entity->get_size();
-
+    entity* e = scene::vars->entity_manager->get(_entity_id);
+    std::vector<textureInfo>& info_vec = e->texSet->get_set();
+    
+    p2d<float> src_pos = e->get_position();
+    p2d<float> src_size = e->get_size();
     for(int i=0;i<info_vec.size();i++)
     {
         UNIT size_unit = info_vec.at(i).size_unit;
@@ -48,11 +48,26 @@ void camera::render(entity* _entity)
         const SDL_FRect* src_rect = new SDL_FRect{pos.x , pos.y , size.x , size.y};
         SDL_FRect* dst_rect = worldToCameraCoordinate(src_rect);
 
-        SDL_Texture* texture = texture_manager->get(info_vec.at(i).id);
-        SDL_RenderCopyF(renderer , texture , NULL , dst_rect);
+        SDL_Texture* texture = scene::vars->texture_manager->get(info_vec.at(i).id);
+        SDL_RenderCopyF(scene::vars->renderer , texture , NULL , dst_rect);
 
         delete src_rect;
         delete dst_rect;
+    }
+}
+
+
+void camera::on_id_change(int lastid , int newid)
+{
+
+}
+
+void camera::render(p2d<int> _chunk)
+{
+    std::vector<int> vec = scene::vars->chunk_manager->get(_chunk)->get_objects();
+    for(int i=0;i<vec.size();i++)
+    {
+        render(vec.at(i));
     }
 }
 
