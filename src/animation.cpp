@@ -1,17 +1,16 @@
+#include "scene.h"
 #include "animation.h"
 
-
-animation::animation(entity* e , timer* t , animationInfo anim_info)
+animation::animation(int e_id, animationInfo anim_info)
 {
     anim_info.generate_time_vec();
     //assign variables
-    this->_entity = e;
-    this->_timer = t;
+    entity_id = e_id;
     this->info = anim_info;
     
     //asssign update function
     std::function<void(double)> foo = std::bind(&animation::update , this , std::placeholders::_1); //placeholder is used to avoid passing double parameter now (it is known only when function is called)
-    _timer->new_dt_function(_entity->get_id() + ID_OFFSET::ANIMATION, foo );
+    scene::vars->clock->new_dt_function(entity_id + ID_OFFSET::ANIMATION, foo);
 
     
 
@@ -21,21 +20,19 @@ animation::animation(entity* e , timer* t , animationInfo anim_info)
 
 animation::~animation()
 {
-    _timer->remove_dt_function(_entity->get_id() + ID_OFFSET::ANIMATION);
-
-
+    scene::vars->clock->remove_dt_function(entity_id + ID_OFFSET::ANIMATION);
 }
 
 void animation::update(double dt)
 {
     
-    double t = _timer->get_dt_elapsed_time(_entity->get_id() + ID_OFFSET::ANIMATION);
+    double t = scene::vars->clock->get_dt_elapsed_time(entity_id + ID_OFFSET::ANIMATION);
     int idx = info.vidx;
     if(t > info.time_vec[idx])
     {
-        _timer->reset_dt_elaped_time(_entity->get_id() + ID_OFFSET::ANIMATION);
+        scene::vars->clock->reset_dt_elaped_time(entity_id + ID_OFFSET::ANIMATION);
         t = info.time_vec[idx];
-        _entity->set_position(info.trajectory.at(info.vidx + 1));
+        scene::vars->entity_manager->get(entity_id)->set_position(info.trajectory.at(info.vidx + 1));
         info.vidx++;
         
         if(info.vidx >= info.trajectory.size() - 1 && info.repeat == false)
@@ -58,7 +55,7 @@ void animation::update(double dt)
             next_position = calculate_type_cubic(t);
             break;
     }
-    _entity->set_position(next_position);
+    scene::vars->entity_manager->get(entity_id)->set_position(next_position);
     }
     
     

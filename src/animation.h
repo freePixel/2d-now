@@ -1,6 +1,4 @@
 #pragma once
-
-
 #include <vector>
 #include "entity.h"
 #include "timer.h"
@@ -76,14 +74,13 @@ class animation
 {
     friend struct animationInfo;
     public:
-        animation(entity* e , timer* t , animationInfo anim_info);
+        animation(int e_id, animationInfo anim_info);
         ~animation();
         void update(double dt);
     private:
 
 
-        entity* _entity = nullptr;
-        timer* _timer = nullptr;
+        int  entity_id;
 
         animationInfo info;
 
