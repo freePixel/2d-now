@@ -3,6 +3,7 @@
 entity::~entity()
 {
     delete dimension;
+    delete texSet;
 }
 
 void entity::move(p2d<float> point)
@@ -47,14 +48,12 @@ const SDL_FRect* entity::get_dimension()
 entity::entity()
 {
     dimension = new SDL_FRect{0,0,0,0};
-    id = id_counter;
-    id_counter += 100;
     texSet = new textureSet();
+    id_c += 50;
+    this->id = id_c;
 }
 
-
-
-int entity::id_counter = 0;
+int entity::id_c = 3000;
 
 bool entity::is_world_coordinate()
 {
@@ -66,11 +65,8 @@ int entity::get_id()
     return this->id;
 }
 
-
-bool entity::exists(entity* e)
+void entity::set_id(int _id)
 {
-    if(e == nullptr) return false;
-    else{
-        return true;
-    }
+    on_id_change(id, _id);
+    this->id = _id;
 }
