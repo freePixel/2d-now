@@ -1,10 +1,9 @@
 #pragma once
 
 #include "stdexcept"
-#include "entity.h"
 #include <vector>
-#include "timer.h"
 #include "textureManager.h"
+
 
 namespace sprite_texture
 {
@@ -33,9 +32,8 @@ class sprite
         /*
         _texture_ids -> vector containing a list of texture ids of a given sprite
         sprite_speed -> time needed in ms to update sprite animation
-        clock        -> current scene timer object
         */
-        sprite(entity* e , std::vector<textureInfo>& _texture_ids, sprite_speed speed , timer* clock); 
+        sprite(int _entity_id ,  std::vector<textureInfo>& _texture_ids, sprite_speed _speed); 
          
         ~sprite();
         
@@ -45,11 +43,10 @@ class sprite
     protected:
 
     private:
-        entity* _entity = nullptr;
         int speed = sprite_speed::normal; //default value
         int size;
+        int entity_id;
         int vec_pos_counter;
-        timer* clock = nullptr;
         std::vector<textureInfo>& texture_ids;
 
         void update(); //next-texture (updated with timer)
