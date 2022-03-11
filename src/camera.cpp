@@ -23,10 +23,12 @@ p2d<float> camera::cameraToWorldCoordinate(p2d<float> pos)
 
 void camera::update_window_size()
 {
-
-    int x = SDL_GetWindowSurface(scene::vars->window)->w;
-    int y = SDL_GetWindowSurface(scene::vars->window)->h;
-    window_size = p2d<float>((float)x , (float)y);
+    int* x = new int();
+    int* y = new int();
+    SDL_GetWindowSize(scene::vars->window , x , y);
+    window_size = p2d<float>((float)(*x) , (float)(*y));
+    delete x;
+    delete y;
 }
 
 void camera::render(int _entity_id)

@@ -88,22 +88,22 @@ void mainMenu::handleEvents()
             case SDL_KEYDOWN:
             switch(event.key.keysym.sym)
             {
-                case SDL_KeyCode::SDLK_w:
+                case SDLK_w:
                 scene::vars->view->move(p2d<float>(0,4.0f));
                 break;
-                case SDL_KeyCode::SDLK_s:
+                case SDLK_s:
                 scene::vars->view->move(p2d<float>(0,-4.0f));
                 break;
-                case SDL_KeyCode::SDLK_a:
+                case SDLK_a:
                 scene::vars->view->move(p2d<float>(4.0f,0));
                 break;
-                case SDL_KeyCode::SDLK_d:
+                case SDLK_d:
                 scene::vars->view->move(p2d<float>(-4.0f,0));
                 break;
-                case SDL_KeyCode::SDLK_r:
+                case SDLK_r:
                 scene::vars->view->scale(p2d<float>(1.05f , 1.05f));
                 break;
-                case SDL_KeyCode::SDLK_t:
+                case SDLK_t:
                 scene::vars->view->scale(p2d<float>(0.95f , 0.95f));
                 break;
 
